@@ -6,8 +6,8 @@ import (
 	"github.com/mndrix/golog"
 )
 
-/* All direction are available in this state of DB */
-var cleanMachine = golog.NewMachine().Consult("busy(init). busy(L). blocked(X):-busy(X). free(X):- \\+busy(X).")
+/* All direction are available in this state of Db */
+var cleanMachine = golog.NewMachine().Consult("busy(init). busy(l). blocked(X):-busy(X). free(X):- \\+blocked(X).")
 
 /* Machine used for runtime work */
 var actualMachine = cleanMachine
@@ -19,15 +19,15 @@ var rollbackMachine = cleanMachine
 func checkDirection(x string) {
 
 	var solutions = actualMachine.ProveAll("blocked(X).")
-	var solutionList []string
+	var solutionlist []string
 
 	for _, solution := range solutions {
 
 		var s = solution.ByName_("X").String()
-		solutionList = append(solutionList, s)
+		solutionlist = append(solutionlist, s)
 	}
 
-	if stringInSlice(x, solutionList) {
+	if stringInSlice(x, solutionlist) {
 		fmt.Println(x + " is busy")
 	} else {
 		fmt.Println(x + " is free")
@@ -36,7 +36,7 @@ func checkDirection(x string) {
 }
 
 /* Method to assert passed location as busy */
-func assertBusy(b string) {
+func assertbusy(b string) {
 
 	/* saving state for rollback */
 	rollbackMachine = actualMachine
@@ -50,35 +50,66 @@ func reset() {
 }
 
 /* Get only free direction */
-func freeDir(x string) {
-	fmt.Println(actualMachine.CanProve("free(" + x + ")."))
+func freeDir() []string {
+	var freeDir []string
+
+	fmt.Println("Dentro", actualMachine.CanProve("free(l)."))
+
+	if actualMachine.CanProve("free(l).") {
+		freeDir = append(freeDir, "L")
+	}
+	if actualMachine.CanProve("free(r).") {
+		freeDir = append(freeDir, "R")
+	}
+	if actualMachine.CanProve("free(f).") {
+		freeDir = append(freeDir, "F")
+	}
+	if actualMachine.CanProve("free(fl).") {
+		freeDir = append(freeDir, "FL")
+	}
+	if actualMachine.CanProve("free(fr).") {
+		freeDir = append(freeDir, "FR")
+	}
+	if actualMachine.CanProve("free(b).") {
+		freeDir = append(freeDir, "B")
+	}
+	if actualMachine.CanProve("free(bl).") {
+		freeDir = append(freeDir, "BL")
+	}
+	if actualMachine.CanProve("free(br).") {
+		freeDir = append(freeDir, "BR")
+	}
+
+	return freeDir
 }
 
 /* Main method (test) */
 
 func main() {
 
-	/* 	checkDirection("L")
-	   	checkDirection("R")
-	   	checkDirection("F")
-	   	checkDirection("FL")
-	   	checkDirection("FR")
-	   	checkDirection("B")
-	   	checkDirection("BL")
-	   	checkDirection("BR")
+	/* 	checkDirection("l")
+	   	checkDirection("r")
+	   	checkDirection("f")
+	   	checkDirection("fl")
+	   	checkDirection("fr")
+	   	checkDirection("b")
+	   	checkDirection("bl")
+	   	checkDirection("br")
 
-	   	assertBusy("F")
+	   	assertbusy("f")
 
-	   	checkDirection("L")
-	   	checkDirection("R")
-	   	checkDirection("F")
-	   	checkDirection("FL")
-	   	checkDirection("FR")
-	   	checkDirection("B")
-	   	checkDirection("BL")
-	   	checkDirection("BR") */
+	   	checkDirection("l")
+	   	checkDirection("r")
+	   	checkDirection("f")
+	   	checkDirection("fl")
+	   	checkDirection("fr")
+	   	checkDirection("b")
+	   	checkDirection("bl")
+	   	checkDirection("br") */
+	/*
+		fmt.Println(actualMachine.CanProve("free(l).")) */
 
-	freeDir("F")
+	fmt.Println(freeDir())
 
 }
 
