@@ -32,16 +32,16 @@ func main() {
 		ball.On("collision", func(data interface{}) {
 			fmt.Printf("collision detected = %+v \n", data)
 		})
-
+		ball.SetBackLEDOutput(50)
 		gobot.Every(1*time.Second, func() {
 			ball.Roll(50, 0)
-			time.Sleep(2300 * time.Millisecond)
+			time.Sleep(2600 * time.Millisecond)
 			ball.Roll(0, 180)
-			time.Sleep(800 * time.Millisecond)
+			time.Sleep(1000 * time.Millisecond)
 			ball.Roll(50, 180)
-			time.Sleep(2300 * time.Millisecond)
+			time.Sleep(2600 * time.Millisecond)
 			ball.Roll(0, 0)
-			time.Sleep(800 * time.Millisecond)
+			time.Sleep(1000 * time.Millisecond)
 		})
 	}
 
