@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
+	"time"
 
 	"github.com/mndrix/golog"
 )
 
 /* All direction are available in this state of Db */
-var cleanMachine = golog.NewMachine().Consult("busy(init). busy(l). blocked(X):-busy(X). free(X):- \\+blocked(X).")
+var cleanMachine = golog.NewMachine().Consult("busy(init). blocked(X):-busy(X). free(X):- \\+blocked(X).")
 
 /* Machine used for runtime work */
 var actualMachine = cleanMachine
@@ -53,8 +55,6 @@ func reset() {
 func freeDir() []string {
 	var freeDir []string
 
-	fmt.Println("Dentro", actualMachine.CanProve("free(l)."))
-
 	if actualMachine.CanProve("free(l).") {
 		freeDir = append(freeDir, "L")
 	}
@@ -81,6 +81,17 @@ func freeDir() []string {
 	}
 
 	return freeDir
+}
+
+/* Pick a random free direction */
+
+func randFreeDir() string {
+	var x = freeDir()
+
+	s := rand.NewSource(time.Now().Unix())
+	r := rand.New(s)
+
+	return x[r.Intn(len(x))]
 }
 
 /* Main method (test) */
@@ -110,6 +121,10 @@ func main() {
 		fmt.Println(actualMachine.CanProve("free(l).")) */
 
 	fmt.Println(freeDir())
+	assertbusy("l")
+	assertbusy("br")
+	fmt.Println(freeDir())
+	fmt.Println(randFreeDir())
 
 }
 
