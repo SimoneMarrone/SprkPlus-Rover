@@ -1,13 +1,10 @@
-package main
+package brain
 
-import "fmt"
 import "github.com/mndrix/golog"
-
-var test = 1
 
 func main() {
 
-	m := golog.NewMachine()
+    m := golog.NewMachine()
 
 	fmt.Printf("Primo giro\n")
 
@@ -44,5 +41,5 @@ func main() {
 	solutions = tempM.ProveAll(`blocked(X).`)
 	for _, solution := range solutions {
 		fmt.Printf("%s is busy\n", solution.ByName_("X"))
-	}
+
 }

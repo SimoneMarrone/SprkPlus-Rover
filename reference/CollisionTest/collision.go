@@ -1,4 +1,4 @@
-// build example
+// +build example
 //
 // Do not build by default.
 
@@ -20,36 +20,23 @@ import (
 
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/ble"
-	"gobot.io/x/gobot/platforms/sphero/ollie"
+	"gobot.io/x/gobot/platforms/sphero/sprkplus"
 )
 
 func main() {
 	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
-	ball := ollie.NewDriver(bleAdaptor)
-	dir := 0
-
+	ball := sprkplus.NewDriver(bleAdaptor)
+  
 	work := func() {
-		ball.Stop()
-
+        
 		ball.On("collision", func(data interface{}) {
-			fmt.Println("Collision Detected!")
-			ball.SetRGB(uint8(gobot.Rand(255)),
-				uint8(gobot.Rand(255)),
-				uint8(gobot.Rand(255)),
-			)
-
-			ball.Roll(10, uint16(-dir))
-
-			//change direction
-			dir = gobot.Rand(360)
-			fmt.Println(ball.Name())
-
+			fmt.Printf("collision detected = %+v \n", data)
+			ball.SetRGB(255, 0, 0)
+			time.Sleep(500 * time.Millisecond)
+			ball.SetRGB(0, 255, 0)
+			ball.Roll(30,0)
 		})
-
-		gobot.Every(3*time.Second, func() {
-			ball.Roll(30, uint16(dir))
-		})
-
+        
 	}
 
 	robot := gobot.NewRobot("sprkplus",
@@ -57,6 +44,6 @@ func main() {
 		[]gobot.Device{ball},
 		work,
 	)
-
+	
 	robot.Start()
 }
