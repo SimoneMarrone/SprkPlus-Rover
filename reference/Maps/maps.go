@@ -61,6 +61,30 @@ func moveWest() {
 	setPositiontRobot(currentPositionX-1, currentPositionY)
 }
 
+/* Set movimento NORD-EST */
+func moveNorthEast() {
+
+	setPositiontRobot(currentPositionX-1, currentPositionY+1)
+}
+
+/* Set movimento SUD-EST */
+func moveSouthEast() {
+
+	setPositiontRobot(currentPositionX+1, currentPositionY+1)
+}
+
+/* Set movimento NORD-OVEST */
+func moveNorthWest() {
+
+	setPositiontRobot(currentPositionX-1, currentPositionY-1)
+}
+
+/* Set movimento SUD-OVEST */
+func moveSouthWest() {
+
+	setPositiontRobot(currentPositionX+1, currentPositionY-1)
+}
+
 /* Stampa mappa */
 func printMap() {
 
@@ -86,7 +110,6 @@ func main() {
 	/* Inizializzazione mappa */
 	initMap()
 	setPositiontRobot(int(dimensionMap/2), int(dimensionMap/2))
-	moveNorth()
 
 	printMap()
 }
