@@ -52,13 +52,13 @@ func moveSouth() {
 /* Set movimento EST */
 func moveEast() {
 
-	setPositiontRobot(currentPositionX+1, currentPositionY+1)
+	setPositiontRobot(currentPositionX+1, currentPositionY)
 }
 
 /* Set movimento OVEST */
 func moveWest() {
 
-	setPositiontRobot(currentPositionX-1, currentPositionY+1)
+	setPositiontRobot(currentPositionX-1, currentPositionY)
 }
 
 /* Stampa mappa */
