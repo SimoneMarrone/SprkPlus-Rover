@@ -4,7 +4,9 @@
 
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 /* Dimensione mappa in quadrati da 10cm  */
 const dimensionMap = 25
@@ -18,10 +20,8 @@ var currentPositionY int
 /* Inizializzazione mappa con misure */
 func initMap() {
 
-	var i, j int
-
-	for i = 0; i < dimensionMap; i++ {
-		for j = 0; j < dimensionMap; j++ {
+	for i := 0; i < dimensionMap; i++ {
+		for j := 0; j < dimensionMap; j++ {
 			maps[i][j] = dimensionSquare
 		}
 	}
@@ -33,32 +33,67 @@ func setPositiontRobot(x int, y int) {
 	currentPositionX = x
 	currentPositionY = y
 
-	// DA ELIMINARE
-	maps[currentPositionX][currentPositionY] = 100
+	maps[currentPositionX][currentPositionY] = 0
+}
+
+/* Check limite mappa */
+func checkMapLimit() {
+
+	if currentPositionX > dimensionMap {
+
+		for i := 0; i < dimensionMap; i++ {
+			for j := 1; j < dimensionMap; j++ {
+				maps[i][j-1] = maps[i][j]
+			}
+		}
+	}
+
+	if currentPositionY > dimensionMap {
+
+		for i := 1; i < dimensionMap; i++ {
+			for j := 0; j < dimensionMap; j++ {
+				maps[i-1][j] = maps[i][j]
+			}
+		}
+	}
+
+	if currentPositionX < 0 {
+
+	}
+
+	if currentPositionY < 0 {
+
+	}
+}
+
+/* Set ostacolo */
+func obstacle(obstacleCm int) {
+
+	maps[currentPositionX][currentPositionY] = obstacleCm
 }
 
 /* Set movimento NORD */
 func moveNorth() {
 
-	setPositiontRobot(currentPositionX, currentPositionY-1)
+	setPositiontRobot(currentPositionX-1, currentPositionY)
 }
 
 /* Set movimento SUD */
 func moveSouth() {
 
-	setPositiontRobot(currentPositionX, currentPositionY+1)
+	setPositiontRobot(currentPositionX+1, currentPositionY)
 }
 
 /* Set movimento EST */
 func moveEast() {
 
-	setPositiontRobot(currentPositionX+1, currentPositionY)
+	setPositiontRobot(currentPositionX, currentPositionY+1)
 }
 
 /* Set movimento OVEST */
 func moveWest() {
 
-	setPositiontRobot(currentPositionX-1, currentPositionY)
+	setPositiontRobot(currentPositionX, currentPositionY-1)
 }
 
 /* Set movimento NORD-EST */
@@ -88,13 +123,11 @@ func moveSouthWest() {
 /* Stampa mappa */
 func printMap() {
 
-	var i, j int
-
-	for i = 0; i < dimensionMap; i++ {
+	for i := 0; i < dimensionMap; i++ {
 
 		fmt.Printf("\n")
 
-		for j = 0; j < dimensionMap; j++ {
+		for j := 0; j < dimensionMap; j++ {
 			fmt.Printf("%d ", maps[i][j])
 		}
 	}
@@ -110,6 +143,14 @@ func main() {
 	/* Inizializzazione mappa */
 	initMap()
 	setPositiontRobot(int(dimensionMap/2), int(dimensionMap/2))
+
+	for i := 0; i < 5; i++ {
+
+		moveNorth()
+		printMap()
+
+		//time.Sleep(500 * time.Millisecond)
+	}
 
 	printMap()
 }
