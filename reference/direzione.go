@@ -5,98 +5,255 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
+
+	"gobot.io/x/gobot"
+	"gobot.io/x/gobot/platforms/ble"
+	"gobot.io/x/gobot/platforms/sphero/sprkplus"
 )
 
-func main() {
-
-	// SOLO PER CONTROLLO - DA ELIMINARE - SCELTA DIREZIONE
-	reader := bufio.NewReader(os.Stdin)
-	fmt.Print("Direzionare verso :  (F,B,L,R)")
-	text, _ := reader.ReadString('\n')
-
-	if strings.TrimRight(text, "\n") == "B" {
-		directionBack()
-	}
-	if strings.TrimRight(text, "\n") == "F" {
-		directionForward()
-	}
-	if strings.TrimRight(text, "\n") == "L" {
-		directionLeft()
-	}
-	if strings.TrimRight(text, "\n") == "R" {
-		directionRight()
-	}
-	// SOLO PER CONTROLLO - DA ELIMINARE - SCELTA DIREZIONE PIù CAMMINO VERSO QUELLA DIREZIONE (impostata velocità fissa a 5)
-	reader := bufio.NewReader(os.Stdin)
-	fmt.Print("Andare verso : (F,B,L,R)")
-	text, _ := reader.ReadString('\n')
-
-	if strings.TrimRight(text, "\n") == "B" {
-		directionBack()
-	}
-	if strings.TrimRight(text, "\n") == "F" {
-		directionForward()
-	}
-	if strings.TrimRight(text, "\n") == "L" {
-		directionLeft()
-	}
-	if strings.TrimRight(text, "\n") == "R" {
-		directionRight()
-	}
-}
-
-// FUNZIONI PER FAR GIRARE SPHERO VERSO UNA DIREZIONE
-func directionBack() {
-	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
-	ball := sprkplus.NewDriver(bleAdaptor)
-	// FA GIRARE SPHERO NEL SENSO OPPOSTO RISPETTO A QUELLO IN CUI SI TROVA
-	ball.Roll(0, 180)
-}
-func directionForward() {
+var directionPreview = "F"
+// DIREZIONARE SPHERO IN AVANTI
+func setDirectionForward() {
+	var F := 0
 	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
 	ball := sprkplus.NewDriver(bleAdaptor)
 
-	ball.Roll(0, 0)
-}
-func directionLeft() {
-	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
-	ball := sprkplus.NewDriver(bleAdaptor)
-	// FA GIRARE SPHERO VERSO SX DAL PUNTO IN CUI SI TROVA
-	ball.Roll(0, 270)
-}
-func directionRight() {
-	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
-	ball := sprkplus.NewDriver(bleAdaptor)
-	// FA GIRARE SPHERO VERSO DX DAL PUNTO IN CUI SI TROVA
-	ball.Roll(0, 90)
-}
+	work := func() {
 
-// FUNZIONI PER FAR ANDARE SPHERO VERSO UNA DIREZIONE
-func goBack() {
-	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
-	ball := sprkplus.NewDriver(bleAdaptor)
-	// FAR ANDARE SPHERO NEL SENSO OPPOSTO RISPETTO A QUELLO IN CUI SI TROVA
-	ball.Roll(0, 180)
-	ball.Roll(5, 0)
+		ball.On("collision", func(data interface{}) {
+			fmt.Printf("collision detected = %+v \n", data)
+		})
+		ball.SetBackLEDOutput(50)
+		gobot.Every(1*time.Second, func() {
+
+			if (directionPreview := "B") {
+				//var B = 0
+				var F = 180
+				//var L = 90
+				//var R = 270
+				ball.Roll(0,180)
+				time.Sleep(1000 * time.Millisecond)
+				directionPreview = "F"
+			}
+			if (directionPreview := "F") {
+				//var B = 180
+				var F = 0
+				//var L = 270
+				//var R = 90
+				ball.Roll(0,0)
+				time.Sleep(1000 * time.Millisecond)
+				directionPreview = "F"
+			}
+			if (directionPreview := "L") {
+				//var B = 90
+				var F = 270
+				//var L = 180
+				//var R = 0
+				ball.Roll(0,270)
+				time.Sleep(1000 * time.Millisecond)
+				directionPreview = "F"
+			}
+			if (directionPreview := "R") {
+				//var B = 270
+				var F = 90
+				//var L = 0
+				//var R = 180
+				ball.Roll(0,90)
+				time.Sleep(1000 * time.Millisecond)
+				directionPreview = "F"
+			}
+		})
+	}
+
+	robot := gobot.NewRobot("sprkplus",
+		[]gobot.Connection{bleAdaptor},
+		[]gobot.Device{ball},
+		work,
+	)
+
+	robot.Start()
 }
-func goForward() {
+// DIREZIONARE SPHERO INDIETRO
+func setDirectionBack() {
+	var F := 0
 	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
 	ball := sprkplus.NewDriver(bleAdaptor)
-	// FAR ANDARE SPHERO NEL SENSO DRITTO NEL SENSO IN CUI SI TROVA
-	ball.Roll(0, 0)
-	ball.Roll(5, 0)
+
+	work := func() {
+
+		ball.On("collision", func(data interface{}) {
+			fmt.Printf("collision detected = %+v \n", data)
+		})
+		ball.SetBackLEDOutput(50)
+		gobot.Every(1*time.Second, func() {
+
+			if (directionPreview := "B") {
+				var B = 0
+				//var F = 180
+				//var L = 90
+				//var R = 270
+				ball.Roll(0,0)
+				time.Sleep(1000 * time.Millisecond)
+				directionPreview = "B"
+			}
+			if (directionPreview := "F") {
+				var B = 180
+				//var F = 0
+				//var L = 270
+				//var R = 90
+				ball.Roll(0,180)
+				time.Sleep(1000 * time.Millisecond)
+				directionPreview = "B"
+			}
+			if (directionPreview := "L") {
+				var B = 90
+				//var F = 270
+				//var L = 180
+				//var R = 0
+				ball.Roll(0,90)
+				time.Sleep(1000 * time.Millisecond)
+				directionPreview = "B"
+			}
+			if (directionPreview := "R") {
+				var B = 270
+				//var F = 90
+				//var L = 0
+				//var R = 180
+				ball.Roll(0,270)
+				time.Sleep(1000 * time.Millisecond)
+				directionPreview = "B"
+			}
+		})
+	}
+
+	robot := gobot.NewRobot("sprkplus",
+		[]gobot.Connection{bleAdaptor},
+		[]gobot.Device{ball},
+		work,
+	)
+
+	robot.Start()
 }
-func goRight() {
+// DIREZIONARE SFERO VERSO SX
+func setDirectionLeft() {
+	var F := 0
 	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
 	ball := sprkplus.NewDriver(bleAdaptor)
-	// FAR ANDARE SPHERO VERSO DESTRA DAL PUNTO IN CUI SI TROVA
-	ball.Roll(0, 90)
-	ball.Roll(5, 0)
+
+	work := func() {
+
+		ball.On("collision", func(data interface{}) {
+			fmt.Printf("collision detected = %+v \n", data)
+		})
+		ball.SetBackLEDOutput(50)
+		gobot.Every(1*time.Second, func() {
+
+			if (directionPreview := "B") {
+				//var B = 0
+				//var F = 180
+				var L = 90
+				//var R = 270
+				ball.Roll(0,90)
+				time.Sleep(1000 * time.Millisecond)
+				directionPreview = "L"
+			}
+			if (directionPreview := "F") {
+				//var B = 180
+				//var F = 0
+				var L = 270
+				//var R = 90
+				ball.Roll(0,270)
+				time.Sleep(1000 * time.Millisecond)
+				directionPreview = "L"
+			}
+			if (directionPreview := "L") {
+				//var B = 90
+				//var F = 270
+				var L = 180
+				//var R = 0
+				ball.Roll(0,180)
+				time.Sleep(1000 * time.Millisecond)
+				directionPreview = "L"
+			}
+			if (directionPreview := "R") {
+				//var B = 270
+				//var F = 90
+				var L = 0
+				//var R = 180
+				ball.Roll(0,0)
+				time.Sleep(1000 * time.Millisecond)
+				directionPreview = "L"
+			}
+		})
+	}
+
+	robot := gobot.NewRobot("sprkplus",
+		[]gobot.Connection{bleAdaptor},
+		[]gobot.Device{ball},
+		work,
+	)
+
+	robot.Start()
 }
-func goLeft() {
+// DIREZIONARE SFERO VERSO DX
+func setDirectionRight() {
+	var F := 0
 	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
 	ball := sprkplus.NewDriver(bleAdaptor)
-	// FAR ANDARE SPHERO VERSO SINISTRA DAL PUNTO IN CUI SI TROVA
-	ball.Roll(0, 270)
-	ball.Roll(5, 0)
+
+	work := func() {
+
+		ball.On("collision", func(data interface{}) {
+			fmt.Printf("collision detected = %+v \n", data)
+		})
+		ball.SetBackLEDOutput(50)
+		gobot.Every(1*time.Second, func() {
+
+			if (directionPreview := "B") {
+				//var B = 0
+				//var F = 180
+				//var L = 90
+				var R = 270
+				ball.Roll(0,270)
+				time.Sleep(1000 * time.Millisecond)
+				directionPreview = "R"
+			}
+			if (directionPreview := "F") {
+				//var B = 180
+				//var F = 0
+				//var L = 270
+				var R = 90
+				ball.Roll(0,90)
+				time.Sleep(1000 * time.Millisecond)
+				directionPreview = "R"
+			}
+			if (directionPreview := "L") {
+				//var B = 90
+				//var F = 270
+				//var L = 180
+				var R = 0
+				ball.Roll(0,90)
+				time.Sleep(1000 * time.Millisecond)
+				directionPreview = "R"
+			}
+			if (directionPreview := "R") {
+				//var B = 270
+				//var F = 90
+				//var L = 0
+				var R = 180
+				ball.Roll(0,180)
+				time.Sleep(1000 * time.Millisecond)
+				directionPreview = "R"
+			}
+		})
+	}
+
+	robot := gobot.NewRobot("sprkplus",
+		[]gobot.Connection{bleAdaptor},
+		[]gobot.Device{ball},
+		work,
+	)
+
+	robot.Start()
 }
