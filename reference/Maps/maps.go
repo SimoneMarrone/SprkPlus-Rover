@@ -2,14 +2,12 @@
 	MAPS  ROBOT
 **/
 
-package main
+package maps
 
 import (
 	"fmt"
-	"math/rand"
 	"os"
 	"os/exec"
-	"time"
 )
 
 /* Dimensione mappa in quadrati da 10cm  */
@@ -33,14 +31,16 @@ type coordObstacle struct {
 	southEast int
 }
 
-/* Inizializzazione mappa con misure */
-func initMap() {
+/*Inizializzazione mappa con misure*/
+func InitMap() {
 
 	for i := 0; i < dimensionMap; i++ {
 		for j := 0; j < dimensionMap; j++ {
 			maps[i][j] = dimensionSquare
 		}
 	}
+
+	setPositiontRobot(int(dimensionMap/2), int(dimensionMap/2))
 }
 
 /* Set posizione robot */
@@ -50,9 +50,6 @@ func setPositiontRobot(x int, y int) {
 	currentPositionY = y
 
 	checkMapLimit()
-
-	//DA CANCELLARE
-	maps[currentPositionX][currentPositionY] = 0
 }
 
 /* Check limite mappa */
@@ -128,13 +125,13 @@ func checkMapLimit() {
 }
 
 /* Set ostacolo */
-func setObstacle(obstacleCm int) {
+func SetObstacle(obstacleCm int) {
 
 	maps[currentPositionX][currentPositionY] = obstacleCm
 }
 
 /* Get ostacoli su posizione robot */
-func getObstacle() coordObstacle {
+func GetObstacle() coordObstacle {
 
 	coord := coordObstacle{
 		north:     maps[currentPositionX-1][currentPositionY],
@@ -150,55 +147,55 @@ func getObstacle() coordObstacle {
 }
 
 /* Set movimento NORD */
-func moveNorth() {
+func MoveNorth() {
 
 	setPositiontRobot(currentPositionX-1, currentPositionY)
 }
 
 /* Set movimento SUD */
-func moveSouth() {
+func MoveSouth() {
 
 	setPositiontRobot(currentPositionX+1, currentPositionY)
 }
 
 /* Set movimento EST */
-func moveEast() {
+func MoveEast() {
 
 	setPositiontRobot(currentPositionX, currentPositionY+1)
 }
 
 /* Set movimento OVEST */
-func moveWest() {
+func MoveWest() {
 
 	setPositiontRobot(currentPositionX, currentPositionY-1)
 }
 
 /* Set movimento NORD-EST */
-func moveNorthEast() {
+func MoveNorthEast() {
 
 	setPositiontRobot(currentPositionX-1, currentPositionY+1)
 }
 
 /* Set movimento SUD-EST */
-func moveSouthEast() {
+func MoveSouthEast() {
 
 	setPositiontRobot(currentPositionX+1, currentPositionY+1)
 }
 
 /* Set movimento NORD-OVEST */
-func moveNorthWest() {
+func MoveNorthWest() {
 
 	setPositiontRobot(currentPositionX-1, currentPositionY-1)
 }
 
 /* Set movimento SUD-OVEST */
-func moveSouthWest() {
+func MoveSouthWest() {
 
 	setPositiontRobot(currentPositionX+1, currentPositionY-1)
 }
 
 /* Stampa mappa */
-func printMap() {
+func PrintMap() {
 
 	cmd := exec.Command("cmd", "/c", "cls")
 	cmd.Stdout = os.Stdout
@@ -218,10 +215,10 @@ func printMap() {
 	fmt.Printf("Posizione Y: %d \n\n", currentPositionY)
 }
 
-/* MAIN */
+/* MAIN
 func main() {
 
-	/* Inizializzazione mappa */
+	// Inizializzazione mappa
 	initMap()
 	setPositiontRobot(int(dimensionMap/2), int(dimensionMap/2))
 
@@ -260,3 +257,4 @@ func main() {
 		time.Sleep(200 * time.Millisecond)
 	}
 }
+*/

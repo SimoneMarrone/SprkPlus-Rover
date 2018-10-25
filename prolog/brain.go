@@ -55,29 +55,29 @@ func Reset() {
 func FreeDir() []string {
 	var freeDir []string
 
-	if actualMachine.CanProve("free(l).") {
-		freeDir = append(freeDir, "L")
+	if actualMachine.CanProve("free(w).") {
+		freeDir = append(freeDir, "W")
 	}
-	if actualMachine.CanProve("free(r).") {
-		freeDir = append(freeDir, "R")
+	if actualMachine.CanProve("free(e).") {
+		freeDir = append(freeDir, "E")
 	}
-	if actualMachine.CanProve("free(f).") {
-		freeDir = append(freeDir, "F")
+	if actualMachine.CanProve("free(n).") {
+		freeDir = append(freeDir, "N")
 	}
-	if actualMachine.CanProve("free(fl).") {
-		freeDir = append(freeDir, "FL")
+	if actualMachine.CanProve("free(nw).") {
+		freeDir = append(freeDir, "NW")
 	}
-	if actualMachine.CanProve("free(fr).") {
-		freeDir = append(freeDir, "FR")
+	if actualMachine.CanProve("free(ne).") {
+		freeDir = append(freeDir, "NE")
 	}
-	if actualMachine.CanProve("free(b).") {
-		freeDir = append(freeDir, "B")
+	if actualMachine.CanProve("free(s).") {
+		freeDir = append(freeDir, "S")
 	}
-	if actualMachine.CanProve("free(bl).") {
-		freeDir = append(freeDir, "BL")
+	if actualMachine.CanProve("free(sw).") {
+		freeDir = append(freeDir, "SW")
 	}
-	if actualMachine.CanProve("free(br).") {
-		freeDir = append(freeDir, "BR")
+	if actualMachine.CanProve("free(se).") {
+		freeDir = append(freeDir, "SE")
 	}
 
 	return freeDir
@@ -121,8 +121,8 @@ func main2() {
 		fmt.Println(actualMachine.CanProve("free(l).")) */
 
 	fmt.Println(FreeDir())
-	AssertBusy("l")
-	AssertBusy("br")
+	AssertBusy("w")
+	AssertBusy("bl")
 	fmt.Println(FreeDir())
 	fmt.Println(RandFreeDir())
 

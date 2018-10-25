@@ -1,162 +1,106 @@
-package main
+package direction
 
 import (
 	"fmt"
-	"os"
 	"time"
 
-	"gobot.io/x/gobot"
-	"gobot.io/x/gobot/platforms/ble"
 	"gobot.io/x/gobot/platforms/sphero/ollie"
 )
 
-const ms float64 = 0.4347826
+var ball *ollie.Driver
 
-func directionNE() {
-	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
-	ball := ollie.NewDriver(bleAdaptor)
-	work := func() {
-		time.Sleep(2000 * time.Millisecond)
-		fmt.Print("\n turn NE")
-		ball.Roll(0, 45)
-		time.Sleep(500 * time.Millisecond)
-		ball.Roll(50, 45)
-	}
-	robot := gobot.NewRobot("sprkplus",
-		[]gobot.Connection{bleAdaptor},
-		[]gobot.Device{ball},
-		work,
-	)
+var wait time.Duration = 1000
+var wait_2 time.Duration = 500
 
-	robot.Start()
+func SetBall(main_ball *ollie.Driver) {
+	ball = main_ball
 }
-func directionNO() {
-	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
-	ball := ollie.NewDriver(bleAdaptor)
-	work := func() {
-		time.Sleep(2000 * time.Millisecond)
-		fmt.Print("\n turn NO")
-		ball.Roll(0, 315)
-		time.Sleep(500 * time.Millisecond)
-		ball.Roll(50, 315)
-	}
-	robot := gobot.NewRobot("sprkplus",
-		[]gobot.Connection{bleAdaptor},
-		[]gobot.Device{ball},
-		work,
-	)
 
-	robot.Start()
+func DirectionNE() {
+
+	time.Sleep(wait * time.Millisecond)
+	fmt.Print("\n turn NE")
+	ball.Roll(0, 45)
+	time.Sleep(wait_2 * time.Millisecond)
+	ball.Roll(50, 45)
+
+	//on.collision{
+	//SET nuova posizione = passare a map
+	//direzione presa
+	//distanza percorsa
+
+	//SET ostacolo su mappa
+	//posizione?
+
+	//}
+
+	//IF NO COLLISION
+	//SET nuova posizione = passare a map
+	//direzione presa
+	//distanza percorsa
+
 }
-func directionSE() {
-	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
-	ball := ollie.NewDriver(bleAdaptor)
-	work := func() {
-		time.Sleep(2000 * time.Millisecond)
-		fmt.Print("\n turn SE")
-		ball.Roll(0, 135)
-		time.Sleep(500 * time.Millisecond)
-		ball.Roll(50, 135)
-	}
-	robot := gobot.NewRobot("sprkplus",
-		[]gobot.Connection{bleAdaptor},
-		[]gobot.Device{ball},
-		work,
-	)
 
-	robot.Start()
+func DirectionNO() {
+
+	time.Sleep(wait * time.Millisecond)
+	fmt.Print("\n turn NO")
+	ball.Roll(0, 315)
+	time.Sleep(wait_2 * time.Millisecond)
+	ball.Roll(50, 315)
+
 }
-func directionSO() {
-	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
-	ball := ollie.NewDriver(bleAdaptor)
-	work := func() {
-		time.Sleep(2000 * time.Millisecond)
-		fmt.Print("\n turn SO")
-		ball.Roll(0, 225)
-		time.Sleep(500 * time.Millisecond)
-		ball.Roll(50, 225)
-	}
-	robot := gobot.NewRobot("sprkplus",
-		[]gobot.Connection{bleAdaptor},
-		[]gobot.Device{ball},
-		work,
-	)
+func DirectionSE() {
 
-	robot.Start()
+	time.Sleep(wait * time.Millisecond)
+	fmt.Print("\n turn SE")
+	ball.Roll(0, 135)
+	time.Sleep(wait_2 * time.Millisecond)
+	ball.Roll(50, 135)
+
 }
-func directionO() {
+func DirectionSO() {
 
-	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
-	ball := ollie.NewDriver(bleAdaptor)
-	work := func() {
-		time.Sleep(2000 * time.Millisecond)
-		fmt.Print("\n turn left")
-		ball.Roll(0, 270)
-		time.Sleep(500 * time.Millisecond)
-		ball.Roll(50, 270)
-	}
-	robot := gobot.NewRobot("sprkplus",
-		[]gobot.Connection{bleAdaptor},
-		[]gobot.Device{ball},
-		work,
-	)
+	time.Sleep(wait * time.Millisecond)
+	fmt.Print("\n turn SO")
+	ball.Roll(0, 225)
+	time.Sleep(wait_2 * time.Millisecond)
+	ball.Roll(50, 225)
 
-	robot.Start()
 }
-func directionE() {
+func DirectionO() {
 
-	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
-	ball := ollie.NewDriver(bleAdaptor)
-	work := func() {
-		time.Sleep(1000 * time.Millisecond)
-		fmt.Print("\n turn right")
-		ball.Roll(0, 90)
-		time.Sleep(500 * time.Millisecond)
-		ball.Roll(50, 90)
-	}
-	robot := gobot.NewRobot("sprkplus",
-		[]gobot.Connection{bleAdaptor},
-		[]gobot.Device{ball},
-		work,
-	)
+	time.Sleep(wait * time.Millisecond)
+	fmt.Print("\n turn left")
+	ball.Roll(0, 270)
+	time.Sleep(wait_2 * time.Millisecond)
+	ball.Roll(50, 270)
 
-	robot.Start()
 }
-func directionN() {
+func DirectionE() {
 
-	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
-	ball := ollie.NewDriver(bleAdaptor)
-	work := func() {
-		time.Sleep(1000 * time.Millisecond)
-		fmt.Print("\n turn forward")
-		ball.Roll(0, 0)
-		time.Sleep(500 * time.Millisecond)
-		ball.Roll(50, 0)
-	}
-	robot := gobot.NewRobot("sprkplus",
-		[]gobot.Connection{bleAdaptor},
-		[]gobot.Device{ball},
-		work,
-	)
+	time.Sleep(wait * time.Millisecond)
+	fmt.Print("\n turn right")
+	ball.Roll(0, 90)
+	time.Sleep(wait_2 * time.Millisecond)
+	ball.Roll(50, 90)
 
-	robot.Start()
 }
-func directionS() {
 
-	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
-	ball := ollie.NewDriver(bleAdaptor)
-	work := func() {
-		time.Sleep(1000 * time.Millisecond)
-		fmt.Print("\n turn back")
-		ball.Roll(0, 180)
-		time.Sleep(500 * time.Millisecond)
-		ball.Roll(50, 180)
-	}
-	robot := gobot.NewRobot("sprkplus",
-		[]gobot.Connection{bleAdaptor},
-		[]gobot.Device{ball},
-		work,
-	)
+func DirectionN() {
 
-	robot.Start()
+	time.Sleep(wait * time.Millisecond)
+	fmt.Print("\n turn forward")
+	ball.Roll(0, 0)
+	time.Sleep(wait_2 * time.Millisecond)
+	ball.Roll(50, 0)
+}
+func DirectionS() {
+
+	time.Sleep(wait * time.Millisecond)
+	fmt.Print("\n turn back")
+	ball.Roll(0, 180)
+	time.Sleep(wait_2 * time.Millisecond)
+	ball.Roll(50, 180)
+
 }

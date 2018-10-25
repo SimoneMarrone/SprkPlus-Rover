@@ -24,9 +24,11 @@ func main() {
 	ball := ollie.NewDriver(bleAdaptor)
 
 	work := func() {
+		var speed uint8 = 70
+		var check = false
 
 		//Start time in millisecond
-		ball.Roll(52, 0)
+		ball.Roll(speed, 180) // 52 = 90cm
 		start := time.Now()
 
 		ball.On("collision", func(data interface{}) {
@@ -39,12 +41,14 @@ func main() {
 			//Get meter travel
 			mRide := elapsed.Seconds() * ms
 			fmt.Printf("raw data: %f \n", elapsed.Seconds())
-			if elapsed.Seconds() <= 1.38 {
-				fmt.Printf("elapsed <30cm = %f \n", mRide-(elapsed.Seconds()*0.187))
-			} else if 1.38 <= elapsed.Seconds() && elapsed.Seconds() <= 1.50 {
-				fmt.Printf("elapsed 30cm= %f \n", mRide-(elapsed.Seconds()*0.14))
-			} else if 1.50 < elapsed.Seconds() && elapsed.Seconds() <= 1.70 {
-				fmt.Printf("elapsed 50cm= %f \n", mRide-(elapsed.Seconds()*0.11))
+			if elapsed.Seconds() <= 1.15 {
+				fmt.Printf("elapsed <30cm = %f \n", mRide-(elapsed.Seconds()*0.165))
+			} else if 1.15 <= elapsed.Seconds() && elapsed.Seconds() <= 1.40 {
+				fmt.Printf("elapsed ca40cm= %f \n", mRide-(elapsed.Seconds()*0.110))
+			} else if 1.40 < elapsed.Seconds() && elapsed.Seconds() <= 1.50 {
+				fmt.Printf("elapsed +40cm= %f \n", mRide-(elapsed.Seconds()*0.085))
+			} else if 1.50 < elapsed.Seconds() && elapsed.Seconds() <= 1.75 {
+				fmt.Printf("elapsed 60cm= %f \n", mRide-(elapsed.Seconds()*0.092))
 			} else if 1.70 < elapsed.Seconds() && elapsed.Seconds() <= 1.99 {
 				fmt.Printf("elapsed 70cm= %f \n", mRide-(elapsed.Seconds()*0.07))
 			} else if 1.99 < elapsed.Seconds() && elapsed.Seconds() <= 2.40 {
@@ -53,7 +57,17 @@ func main() {
 				fmt.Printf("elapsed 90+cm = %f \n", mRide-(elapsed.Seconds()*0.054))
 			}
 
-			ball.Stop()
+			if check {
+				ball.Stop()
+				ball.Roll(speed, 0)
+				ball.SetRGB(255, 27, 19)
+				check = false
+			} else {
+				ball.Stop()
+				ball.Roll(speed, 180)
+				ball.SetRGB(18, 220, 102)
+				check = true
+			}
 
 		})
 	}

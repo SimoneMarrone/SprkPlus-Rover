@@ -1,17 +1,48 @@
 package main
 
 import (
-	"fmt"
+	"os"
+
+	"gobot.io/x/gobot"
+	"gobot.io/x/gobot/platforms/ble"
+	"gobot.io/x/gobot/platforms/sphero/ollie"
 
 	"./prolog"
+
+	"./reference/Direction"
+	"./reference/Maps"
 )
 
 func main() {
 
-	prolog.AssertBusy("b")
-	prolog.AssertBusy("l")
-	prolog.AssertBusy("f")
-	prolog.AssertBusy("fl")
-	fmt.Println(prolog.FreeDir())
-	fmt.Println(prolog.RandFreeDir())
+	//get parameters from console (SK-9885)
+	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
+	ball := ollie.NewDriver(bleAdaptor)
+
+	//setting ball to direction library
+	direction.SetBall(ball)
+
+	//keeping library
+	prolog.AssertBusy("L")
+
+	//map init
+	maps.InitMap()
+	maps.PrintMap()
+
+	//main function for sprk
+	work := func() {
+
+		//taking direction
+		direction.DirectionNE()
+	}
+
+	//New adapter
+	robot := gobot.NewRobot("sprkplus",
+		[]gobot.Connection{bleAdaptor},
+		[]gobot.Device{ball},
+		work,
+	)
+
+	robot.Start()
+
 }
