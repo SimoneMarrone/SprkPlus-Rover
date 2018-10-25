@@ -10,25 +10,25 @@ import (
 	"os/exec"
 )
 
-/* Dimensione mappa in quadrati da 10cm  */
+/* Dimensione mappa  */
 const dimensionMap = 25
-const dimensionSquare = 10
+const square = "="
 
 /* Array mappa con attuale posizione robot */
-var maps [dimensionMap][dimensionMap]int
+var maps [dimensionMap][dimensionMap]string
 var currentPositionX int
 var currentPositionY int
 
 /* Coordinate ostacoli */
 type coordObstacle struct {
-	north     int
-	south     int
-	east      int
-	west      int
-	northWest int
-	southWest int
-	northEast int
-	southEast int
+	north     string
+	south     string
+	east      string
+	west      string
+	northWest string
+	southWest string
+	northEast string
+	southEast string
 }
 
 /*Inizializzazione mappa con misure*/
@@ -36,7 +36,7 @@ func InitMap() {
 
 	for i := 0; i < dimensionMap; i++ {
 		for j := 0; j < dimensionMap; j++ {
-			maps[i][j] = dimensionSquare
+			maps[i][j] = square
 		}
 	}
 
@@ -48,7 +48,7 @@ func setPositiontRobot(x int, y int) {
 
 	currentPositionX = x
 	currentPositionY = y
-
+	
 	checkMapLimit()
 }
 
@@ -62,7 +62,7 @@ func checkMapLimit() {
 
 				if i == dimensionMap-1 {
 					maps[i-1][j] = maps[i][j]
-					maps[dimensionMap-1][j] = dimensionSquare
+					maps[dimensionMap-1][j] = square
 				} else {
 					maps[i-1][j] = maps[i][j]
 				}
@@ -70,6 +70,7 @@ func checkMapLimit() {
 		}
 
 		currentPositionX--
+
 	}
 
 	if currentPositionY > dimensionMap-1 {
@@ -79,7 +80,7 @@ func checkMapLimit() {
 
 				if j == dimensionMap-1 {
 					maps[i][j-1] = maps[i][j]
-					maps[i][dimensionMap-1] = dimensionSquare
+					maps[i][dimensionMap-1] = square
 				} else {
 					maps[i][j-1] = maps[i][j]
 				}
@@ -87,8 +88,9 @@ func checkMapLimit() {
 		}
 
 		currentPositionY--
-	}
 
+	} 
+	
 	if currentPositionX < 0 {
 
 		for i := dimensionMap - 1; i > 0; i-- {
@@ -96,7 +98,7 @@ func checkMapLimit() {
 
 				if i == 1 {
 					maps[i][j] = maps[i-1][j]
-					maps[0][j] = dimensionSquare
+					maps[0][j] = square
 				} else {
 					maps[i][j] = maps[i-1][j]
 				}
@@ -104,8 +106,9 @@ func checkMapLimit() {
 		}
 
 		currentPositionX++
-	}
 
+	}
+	
 	if currentPositionY < 0 {
 
 		for i := dimensionMap - 1; i >= 0; i-- {
@@ -113,35 +116,58 @@ func checkMapLimit() {
 
 				if i == 0 {
 					maps[i][j] = maps[i][j-1]
-					maps[0][j-1] = dimensionSquare
+					maps[0][j-1] = square
 				} else {
 					maps[i][j] = maps[i][j-1]
 				}
 			}
 		}
-
+		
 		currentPositionY++
 	}
 }
 
 /* Set ostacolo */
-func SetObstacle(obstacleCm int) {
+func SetObstacle() {
 
-	maps[currentPositionX][currentPositionY] = obstacleCm
+	maps[currentPositionX][currentPositionY] = "#"
 }
 
 /* Get ostacoli su posizione robot */
-func GetObstacle() coordObstacle {
+func LookRound() coordObstacle {
+
+	var tempCurrentPositionX int = currentPositionX
+	var tempCurrentPositionY int = currentPositionY
+
+	if currentPositionX <= 0 {
+
+		tempCurrentPositionX++
+	}
+
+	if currentPositionY <= 0 {
+
+		tempCurrentPositionY++
+	}
+
+	if currentPositionX >= dimensionMap-1 {
+
+		tempCurrentPositionX--
+	}
+
+	if currentPositionY >= dimensionMap-1 {
+		
+		tempCurrentPositionY--
+	}
 
 	coord := coordObstacle{
-		north:     maps[currentPositionX-1][currentPositionY],
-		south:     maps[currentPositionX+1][currentPositionY],
-		east:      maps[currentPositionX][currentPositionY+1],
-		west:      maps[currentPositionX][currentPositionY-1],
-		northWest: maps[currentPositionX-1][currentPositionY-1],
-		southWest: maps[currentPositionX+1][currentPositionY-1],
-		northEast: maps[currentPositionX-1][currentPositionY+1],
-		southEast: maps[currentPositionX+1][currentPositionY+1]}
+		north:     maps[tempCurrentPositionX-1][tempCurrentPositionY],
+		south:     maps[tempCurrentPositionX+1][tempCurrentPositionY],
+		east:      maps[tempCurrentPositionX][tempCurrentPositionY+1],
+		west:      maps[tempCurrentPositionX][tempCurrentPositionY-1],
+		northWest: maps[tempCurrentPositionX-1][tempCurrentPositionY-1],
+		southWest: maps[tempCurrentPositionX+1][tempCurrentPositionY-1],
+		northEast: maps[tempCurrentPositionX-1][tempCurrentPositionY+1],
+		southEast: maps[tempCurrentPositionX+1][tempCurrentPositionY+1]}
 
 	return coord
 }
@@ -206,55 +232,12 @@ func PrintMap() {
 		fmt.Printf("\n")
 
 		for j := 0; j < dimensionMap; j++ {
-			fmt.Printf("%d ", maps[i][j])
+			fmt.Printf("%s ", maps[i][j])
 		}
 	}
 
 	fmt.Printf("\n\n## Posizione Robot ##\n")
 	fmt.Printf("Posizione X: %d \n", currentPositionX)
 	fmt.Printf("Posizione Y: %d \n\n", currentPositionY)
+	fmt.Printf("OSTACOLI: %s \n", LookRound())
 }
-
-/* MAIN
-func main() {
-
-	// Inizializzazione mappa
-	initMap()
-	setPositiontRobot(int(dimensionMap/2), int(dimensionMap/2))
-
-	for i := 0; i < 10000; i++ {
-
-		switch rand.Intn(8-1) + 1 {
-		case 1:
-			moveNorth()
-			break
-		case 2:
-			moveSouth()
-			break
-		case 3:
-			moveEast()
-			break
-		case 4:
-			moveWest()
-			break
-		case 5:
-			moveNorthWest()
-			break
-		case 6:
-			moveNorthEast()
-			break
-		case 7:
-			moveSouthWest()
-			break
-		case 8:
-			moveSouthEast()
-			break
-		}
-
-		printMap()
-		fmt.Printf("OSTACOLI: %d \n", getObstacle())
-
-		time.Sleep(200 * time.Millisecond)
-	}
-}
-*/
