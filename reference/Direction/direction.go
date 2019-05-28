@@ -9,7 +9,7 @@ import (
 )
 
 const ms float64 = 0.4347826
-const wait time.Duration = 500
+const wait time.Duration = 2500
 const speed uint8 = 25
 const interval int = 5
 
@@ -84,8 +84,8 @@ func MoveInDirection(direction string) {
 	/* Movimento del robot */
 	time.Sleep(wait * time.Millisecond)
 	ball.Roll(0, getGradeDirection(direction))
-	time.Sleep(wait * time.Millisecond)
-	ball.Roll(speed/2, getGradeDirection(direction))
+	time.Sleep(wait / 2 * time.Millisecond)
+	ball.Roll(speed, getGradeDirection(direction))
 
 	start := time.Now()
 	var isCollision = false
