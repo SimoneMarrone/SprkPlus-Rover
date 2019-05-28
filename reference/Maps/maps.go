@@ -20,15 +20,15 @@ var currentPositionX int
 var currentPositionY int
 
 /* Coordinate ostacoli */
-type coordObstacle struct {
-	north     string
-	south     string
-	east      string
-	west      string
-	northWest string
-	southWest string
-	northEast string
-	southEast string
+type CoordObstacle struct {
+	North     string
+	South     string
+	East      string
+	West      string
+	NorthWest string
+	SouthWest string
+	NorthEast string
+	SouthEast string
 }
 
 /*Inizializzazione mappa con misure*/
@@ -134,7 +134,7 @@ func SetObstacle() {
 }
 
 /* Get ostacoli su posizione robot */
-func LookRound() coordObstacle {
+func LookRound() CoordObstacle {
 
 	var tempCurrentPositionX int = currentPositionX
 	var tempCurrentPositionY int = currentPositionY
@@ -159,15 +159,15 @@ func LookRound() coordObstacle {
 		tempCurrentPositionY--
 	}
 
-	coord := coordObstacle{
-		north:     maps[tempCurrentPositionX-1][tempCurrentPositionY],
-		south:     maps[tempCurrentPositionX+1][tempCurrentPositionY],
-		east:      maps[tempCurrentPositionX][tempCurrentPositionY+1],
-		west:      maps[tempCurrentPositionX][tempCurrentPositionY-1],
-		northWest: maps[tempCurrentPositionX-1][tempCurrentPositionY-1],
-		southWest: maps[tempCurrentPositionX+1][tempCurrentPositionY-1],
-		northEast: maps[tempCurrentPositionX-1][tempCurrentPositionY+1],
-		southEast: maps[tempCurrentPositionX+1][tempCurrentPositionY+1]}
+	coord := CoordObstacle{
+		North:     maps[tempCurrentPositionX-1][tempCurrentPositionY],
+		South:     maps[tempCurrentPositionX+1][tempCurrentPositionY],
+		East:      maps[tempCurrentPositionX][tempCurrentPositionY+1],
+		West:      maps[tempCurrentPositionX][tempCurrentPositionY-1],
+		NorthWest: maps[tempCurrentPositionX-1][tempCurrentPositionY-1],
+		SouthWest: maps[tempCurrentPositionX+1][tempCurrentPositionY-1],
+		NorthEast: maps[tempCurrentPositionX-1][tempCurrentPositionY+1],
+		SouthEast: maps[tempCurrentPositionX+1][tempCurrentPositionY+1]}
 
 	return coord
 }

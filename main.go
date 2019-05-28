@@ -2,7 +2,7 @@ package main
 
 import (
 	"os"
-
+	"fmt"
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/ble"
 	"gobot.io/x/gobot/platforms/sphero/ollie"
@@ -24,14 +24,21 @@ func main() {
 
 	//keeping library
 	prolog.AssertBusy("L")
-
+	
 	//map init
 	maps.InitMap()
 	maps.PrintMap()
-
+	
 	//main function for sprk
 	work := func() {
+		
+		prolog.AssertBusy("w")
+		fmt.Printf("%t",prolog.CheckDirection("w"))
 
+		prolog.SetDirOfMap()
+		fmt.Printf("%s",prolog.FreeDir())
+
+		//fmt.Printf("%s",prolog.FreeDir())
 		//taking direction
 		direction.DirectionNE()
 	}

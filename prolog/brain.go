@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"time"
 
+	"../reference/Maps"
 	"github.com/mndrix/golog"
 )
 
@@ -18,7 +19,7 @@ var actualMachine = cleanMachine
 var rollbackMachine = cleanMachine
 
 /* Method to check if direction is busy */
-func CheckDirection(x string) {
+func CheckDirection(x string) bool{
 
 	var solutions = actualMachine.ProveAll("blocked(X).")
 	var solutionlist []string
@@ -31,8 +32,10 @@ func CheckDirection(x string) {
 
 	if stringInSlice(x, solutionlist) {
 		fmt.Println(x + " is busy")
+		return false
 	} else {
 		fmt.Println(x + " is free")
+		return true
 	}
 
 }
@@ -79,8 +82,27 @@ func FreeDir() []string {
 	if actualMachine.CanProve("free(se).") {
 		freeDir = append(freeDir, "SE")
 	}
+	return freeDir	//return freeDir
+}
 
-	return freeDir
+func SetDirOfMap(){
+	
+	// N - S - E - O - NO - SO - NE - SE
+	//var DIR = [8]string {"N","S","E","O","NO","SO","NE","SE"}
+	
+	var DIR maps.CoordObstacle = maps.LookRound()
+
+	if(DIR.North == "#") { AssertBusy("n") }
+	if(DIR.NorthEast == "#") { AssertBusy("ne") }
+	if(DIR.NorthWest == "#") { AssertBusy("nw") }
+	if(DIR.South == "#") { AssertBusy("s") }
+	if(DIR.SouthEast == "#") { AssertBusy("se") }
+	if(DIR.SouthWest == "#") { AssertBusy("sw") }
+	if(DIR.West == "#") { AssertBusy("w") }
+	if(DIR.East == "#") { AssertBusy("e") }
+	 
+	fmt.Println("East %t",actualMachine.CanProve("free(e)."))
+	fmt.Println("Ovest %t",actualMachine.CanProve("free(w)."))
 }
 
 /* Pick a random free direction */
@@ -92,40 +114,6 @@ func RandFreeDir() string {
 	r := rand.New(s)
 
 	return x[r.Intn(len(x))]
-}
-
-/* Main method (test) */
-
-func main2() {
-
-	/* 	checkDirection("l")
-	   	checkDirection("r")
-	   	checkDirection("f")
-	   	checkDirection("fl")
-	   	checkDirection("fr")
-	   	checkDirection("b")
-	   	checkDirection("bl")
-	   	checkDirection("br")
-
-	   	assertbusy("f")
-
-	   	checkDirection("l")
-	   	checkDirection("r")
-	   	checkDirection("f")
-	   	checkDirection("fl")
-	   	checkDirection("fr")
-	   	checkDirection("b")
-	   	checkDirection("bl")
-	   	checkDirection("br") */
-	/*
-		fmt.Println(actualMachine.CanProve("free(l).")) */
-
-	fmt.Println(FreeDir())
-	AssertBusy("w")
-	AssertBusy("bl")
-	fmt.Println(FreeDir())
-	fmt.Println(RandFreeDir())
-
 }
 
 /* Check if an element is present in a list */
