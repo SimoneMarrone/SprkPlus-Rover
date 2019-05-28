@@ -32,15 +32,15 @@ func main() {
 		ball.SetRGB(255, 0, 0)
 
 		/* Tempo di collisione */
-		elapsed := time.Since(start)
+		elapsed := time.Since(direction.Start)
 
 		/* Metri percorsi */
-		//mRide := (elapsed.Seconds() * ms) - elapsed.Seconds()
-		mRide := elapsed.Seconds() * ms
+		//mRide := (elapsed.Seconds() * Ms) - elapsed.Seconds()
+		mRide := elapsed.Seconds() * direction.Ms
 		fmt.Printf("Tempo di collisione %f \n", mRide)
 
-		for i := 0; i < interval; i++ {
-			setPosition(direction)
+		for i := 0; i < direction.Interval; i++ {
+			//setPosition(direction)
 		}
 		//maps.SetObstacle()
 	})

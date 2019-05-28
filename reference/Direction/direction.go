@@ -7,10 +7,11 @@ import (
 	"gobot.io/x/gobot/platforms/sphero/ollie"
 )
 
-const ms float64 = 0.4347826
-const wait time.Duration = 3000
-const interval int = 5
+const Ms float64 = 0.4347826
+const Wait time.Duration = 3000
+const Interval int = 5
 
+var Start time.Time
 /* DRIVER */
 var ball *ollie.Driver
 
@@ -79,12 +80,12 @@ func MoveInDirection(direction string, speed uint8) {
 	ball.SetRGB(0, 128, 0)
 
 	/* Movimento del robot */
-	time.Sleep(wait * time.Millisecond)
+	time.Sleep(Wait * time.Millisecond)
 	ball.Roll(0, getGradeDirection(direction))
-	time.Sleep(wait / 2 * time.Millisecond)
+	time.Sleep(Wait / 2 * time.Millisecond)
 	ball.Roll(speed, getGradeDirection(direction))
 
-	start := time.Now()
-	_ = start
+	Start := time.Now()
+	_ = Start
 	maps.PrintMap()
 }
