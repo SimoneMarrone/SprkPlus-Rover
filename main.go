@@ -24,7 +24,7 @@ func main() {
 	ball.EnableStopOnDisconnect()
 	ball.SetBackLEDOutput(1)
 	ball.SetStabilization(true)
-	ball.SetRotationRate(100)
+	ball.SetRotationRate(1)
 
 	//setting ball to direction library
 	direction.SetBall(ball)
@@ -48,8 +48,8 @@ func main() {
 		//fmt.Printf("%s",prolog.FreeDir())
 		//taking direction
 		for {
-			synchronized(direction.MoveInDirection("N"))
-			synchronized(direction.MoveInDirection("S"))
+			direction.MoveInDirection("N", 30)
+			direction.MoveInDirection("S", 30)
 		}
 	}
 
