@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/ble"
@@ -25,6 +26,24 @@ func main() {
 	ball.SetBackLEDOutput(1)
 	ball.SetStabilization(true)
 	ball.SetRotationRate(1)
+	ball.On("collision", func(data interface{}) {
+
+		/* Colore RGB - rosso */
+		ball.SetRGB(255, 0, 0)
+
+		/* Tempo di collisione */
+		elapsed := time.Since(start)
+
+		/* Metri percorsi */
+		//mRide := (elapsed.Seconds() * ms) - elapsed.Seconds()
+		mRide := elapsed.Seconds() * ms
+		fmt.Printf("Tempo di collisione %f \n", mRide)
+
+		for i := 0; i < interval; i++ {
+			setPosition(direction)
+		}
+		//maps.SetObstacle()
+	})
 
 	//setting ball to direction library
 	direction.SetBall(ball)
