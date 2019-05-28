@@ -84,11 +84,12 @@ func MoveInDirection(direction string) {
 	ball.Roll(0, getGradeDirection(direction))
 	time.Sleep(wait / 2 * time.Millisecond)
 	ball.Roll(speed, getGradeDirection(direction))
-	start := time.Now()
+	//start := time.Now()
 
-	var isCollision = false
 	ball.On("collision", func(data interface{}) {
-		isCollision = true
+
+		/* Colore RGB - rosso */
+		ball.SetRGB(255, 0, 0)
 
 		/* Tempo di collisione */
 		//elapsed := time.Since(start)
@@ -97,9 +98,6 @@ func MoveInDirection(direction string) {
 		//mRide := (elapsed.Seconds() * ms) - elapsed.Seconds()
 		//fmt.Printf("mRide %f \n", mRide)
 
-		/* Colore RGB - rosso */
-		ball.SetRGB(255, 0, 0)
-
 		for i := 0; i < interval; i++ {
 			setPosition(direction)
 		}
@@ -107,16 +105,5 @@ func MoveInDirection(direction string) {
 		//if mRide
 		//maps.SetObstacle()
 	})
-
-	if !isCollision {
-		for i := 0; i < interval; i++ {
-			setPosition(direction)
-		}
-	}
 	maps.PrintMap()
-
-	elapsed := time.Since(start)
-	if elapsed.Seconds() >= 2 {
-		ball.Stop()
-	}
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/ble"
@@ -29,9 +30,6 @@ func main() {
 	//setting ball to direction library
 	direction.SetBall(ball)
 
-	//keeping library
-	prolog.AssertBusy("L")
-
 	//map init
 	maps.InitMap()
 	maps.PrintMap()
@@ -49,10 +47,9 @@ func main() {
 		//taking direction
 		for {
 			direction.MoveInDirection("N")
+			time.Sleep(2000 * time.Millisecond)
 			direction.MoveInDirection("S")
-			
-			prolog.SetDirOfMap()
-			fmt.Printf("",prolog.FreeDir())	
+			time.Sleep(2000 * time.Millisecond)
 		}
 	}
 
