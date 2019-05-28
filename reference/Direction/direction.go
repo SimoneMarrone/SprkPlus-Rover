@@ -77,9 +77,6 @@ func setPosition(direction string) {
 /* Movimento ball nella direzione selezionata */
 func MoveInDirection(direction string) {
 
-	/* Imposta la stabilizzazione */
-	ball.SetStabilization(true)
-
 	/* Movimento del robot */
 	time.Sleep(wait * time.Millisecond)
 	ball.Roll(0, getGradeDirection(direction))

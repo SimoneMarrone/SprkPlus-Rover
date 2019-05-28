@@ -23,6 +23,7 @@ func main() {
 	// Default configuration
 	ball.EnableStopOnDisconnect()
 	ball.SetBackLEDOutput(1)
+	ball.SetStabilization(true)
 
 	//setting ball to direction library
 	direction.SetBall(ball)
