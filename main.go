@@ -48,8 +48,8 @@ func main() {
 		//fmt.Printf("%s",prolog.FreeDir())
 		//taking direction
 		for {
-			direction.MoveInDirection("N")
-			direction.MoveInDirection("S")
+			synchronized(direction.MoveInDirection("N"))
+			synchronized(direction.MoveInDirection("S"))
 		}
 	}
 
