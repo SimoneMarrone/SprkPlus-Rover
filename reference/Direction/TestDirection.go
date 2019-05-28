@@ -4,19 +4,18 @@ import (
 	"fmt"
 	"time"
 
-	"gobot.io/x/gobot/platforms/sphero/ollie"
 )
-
+/* 
 const ms float64 = 0.4347826
 const wait time.Duration = 500
-const speed uint8 = 50
+const speed uint8 = 50 */
 
 /* DRIVER */
-var ball *ollie.Driver
+/* var ball *ollie.Driver
 
 func SetBall(mainBall *ollie.Driver) {
 	ball = mainBall
-}
+} */
 
 func getGradeDirection(grade string) uint16 {
 	switch grade {
@@ -41,13 +40,13 @@ func getGradeDirection(grade string) uint16 {
 	}
 }
 
-func moveInDirection(direction string) {
+func MoveInDirection(direction string) {
 
 	/* Movimento del robot */
 	time.Sleep(wait * time.Millisecond)
 	ball.Roll(0, getGradeDirection(direction))
 	time.Sleep(wait * time.Millisecond)
-	ball.Roll(speed, getGradeDirection(direction))
+	ball.Roll(25, getGradeDirection(direction))
 
 	start := time.Now()
 	ball.On("collision", func(data interface{}) {

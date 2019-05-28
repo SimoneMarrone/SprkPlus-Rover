@@ -40,7 +40,7 @@ func main() {
 
 		//fmt.Printf("%s",prolog.FreeDir())
 		//taking direction
-		direction.DirectionNE()
+		direction.MoveInDirection("N")
 	}
 
 	//New adapter
