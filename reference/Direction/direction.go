@@ -76,7 +76,7 @@ func setPosition(direction string) {
 
 /* Movimento ball nella direzione selezionata */
 func MoveInDirection(direction string) {
-	/* Colore di default RGB - verde */
+	/* Colore RGB - verde */
 	ball.SetRGB(0, 128, 0)
 
 	/* Movimento del robot */
@@ -97,13 +97,13 @@ func MoveInDirection(direction string) {
 		/* Metri percorsi */
 		//mRide := (elapsed.Seconds() * ms) - elapsed.Seconds()
 		//fmt.Printf("Percorso %f \n", mRide-(elapsed.Seconds()))
-		/* Colore di default RGB - giallo */
-		ball.SetRGB(255, 255, 0)
+		/* Colore RGB - rosso */
+		ball.SetRGB(255, 0, 0)
 
 		for i := 0; i < interval; i++ {
 			setPosition(direction)
 		}
-		maps.SetObstacle()
+		//maps.SetObstacle()
 	})
 
 	if !isCollision {
