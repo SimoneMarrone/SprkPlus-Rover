@@ -64,15 +64,8 @@ func main() {
 		//fmt.Printf("%s",prolog.FreeDir())
 		//taking direction
 		for {
-<<<<<<< HEAD
-			direction.MoveInDirection("N")
-			time.Sleep(2000 * time.Millisecond)
-			direction.MoveInDirection("S")
-			time.Sleep(2000 * time.Millisecond)
-=======
 			direction.MoveInDirection("N", 30)
 			direction.MoveInDirection("S", 30)
->>>>>>> f489b9a1187da6127d5db38aeec9edfaaca2b84a
 		}
 	}
 
