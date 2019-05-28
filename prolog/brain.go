@@ -10,7 +10,7 @@ import (
 )
 
 /* All direction are available in this state of Db */
-var cleanMachine = golog.NewMachine().Consult("busy(init). blocked(X):-busy(X). free(X):- \\+blocked(X).")
+var cleanMachine = golog.NewMachine().Consult("busy(X):-blocked(X). blocked(init).")
 
 /* Machine used for runtime work */
 var actualMachine = cleanMachine
@@ -21,7 +21,7 @@ var rollbackMachine = cleanMachine
 /* Method to check if direction is busy */
 func CheckDirection(x string) bool{
 
-	var solutions = actualMachine.ProveAll("blocked(X).")
+	var solutions = actualMachine.ProveAll("busy(X).")
 	var solutionlist []string
 
 	for _, solution := range solutions {
@@ -46,7 +46,7 @@ func AssertBusy(b string) {
 	/* saving state for rollback */
 	rollbackMachine = actualMachine
 
-	actualMachine = actualMachine.Consult("busy(" + b + ").")
+	actualMachine = actualMachine.Consult("blocked(" + b + ").")
 	//fmt.Println("Test direzione busy %t", actualMachine.CanProve("busy("+b+")."))
 }
 
@@ -59,28 +59,28 @@ func Reset() {
 func FreeDir() []string {
 	var freeDir []string
 
-	if actualMachine.CanProve("free(w).") {
+	if !actualMachine.CanProve("busy(w).") {
 		freeDir = append(freeDir, "W")
 	}
-	if actualMachine.CanProve("free(e).") {
+	if !actualMachine.CanProve("busy(e).") {
 		freeDir = append(freeDir, "E")
 	}
-	if actualMachine.CanProve("free(n).") {
+	if !actualMachine.CanProve("busy(n).") {
 		freeDir = append(freeDir, "N")
 	}
-	if actualMachine.CanProve("free(nw).") {
+	if !actualMachine.CanProve("busy(nw).") {
 		freeDir = append(freeDir, "NW")
 	}
-	if actualMachine.CanProve("free(ne).") {
+	if !actualMachine.CanProve("busy(ne).") {
 		freeDir = append(freeDir, "NE")
 	}
-	if actualMachine.CanProve("free(s).") {
+	if !actualMachine.CanProve("busy(s).") {
 		freeDir = append(freeDir, "S")
 	}
-	if actualMachine.CanProve("free(sw).") {
+	if !actualMachine.CanProve("busy(sw).") {
 		freeDir = append(freeDir, "SW")
 	}
-	if actualMachine.CanProve("free(se).") {
+	if !actualMachine.CanProve("busy(se).") {
 		freeDir = append(freeDir, "SE")
 	}
 	return freeDir	//return freeDir
@@ -102,10 +102,10 @@ func SetDirOfMap(){
 	if(DIR.West == "#") { AssertBusy("w") }
 	if(DIR.East == "=") { AssertBusy("e") }
 	
-	fmt.Println(actualMachine.CanProve("free(e)."))
+	fmt.Println(actualMachine.CanProve("busy(e)."))
 	AssertBusy("e")
 	fmt.Println(actualMachine.CanProve("busy(e)."))
-	fmt.Println(actualMachine.CanProve("free(e)."))
+	fmt.Println(actualMachine.CanProve("busy(e)."))
 }
 
 /* Pick a random free direction */
