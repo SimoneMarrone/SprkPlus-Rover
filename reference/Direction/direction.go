@@ -85,7 +85,7 @@ func MoveInDirection(direction string) {
 	time.Sleep(wait * time.Millisecond)
 	ball.Roll(0, getGradeDirection(direction))
 	time.Sleep(wait * time.Millisecond)
-	ball.Roll(speed, getGradeDirection(direction))
+	ball.Roll(speed/2, getGradeDirection(direction))
 
 	start := time.Now()
 	var isCollision = false
@@ -97,8 +97,9 @@ func MoveInDirection(direction string) {
 		elapsed.Seconds()
 
 		/* Metri percorsi */
-		mRide := (elapsed.Seconds() * ms) - elapsed.Seconds()
-		fmt.Printf("Percorso %f \n", mRide-(elapsed.Seconds()))
+		//mRide := (elapsed.Seconds() * ms) - elapsed.Seconds()
+		//fmt.Printf("Percorso %f \n", mRide-(elapsed.Seconds()))
+		fmt.Printf("COLLISIONE")
 
 		for i := 0; i < interval; i++ {
 			setPosition(direction)
@@ -107,6 +108,7 @@ func MoveInDirection(direction string) {
 	})
 
 	if !isCollision {
+		fmt.Printf("NESSUNA COLLISIONE")
 		for i := 0; i < interval; i++ {
 			setPosition(direction)
 		}
