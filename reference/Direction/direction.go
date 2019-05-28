@@ -96,7 +96,7 @@ func MoveInDirection(direction string) {
 		elapsed.Seconds()
 
 		/* Metri percorsi */
-		mRide := (elapsed.Seconds() * ms) - elapsed.Seconds()
+		//mRide := (elapsed.Seconds() * ms) - elapsed.Seconds()
 		//fmt.Printf("mRide %f \n", mRide)
 
 		/* Colore RGB - rosso */
@@ -119,7 +119,7 @@ func MoveInDirection(direction string) {
 			elapsed.Seconds()
 
 			/* Metri percorsi */
-			mRide := elapsed.Seconds() * ms
+			mRide := elapsed.Seconds()
 			fmt.Printf("mRide %f \n", mRide)
 		}
 	}
