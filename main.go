@@ -65,6 +65,7 @@ func main() {
 		//taking direction
 		for {
 			direction.MoveInDirection("N", 30)
+			direction.Start := time.Now()
 			direction.MoveInDirection("S", 30)
 		}
 	}
