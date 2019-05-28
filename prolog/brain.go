@@ -2,8 +2,6 @@ package prolog
 
 import (
 	"fmt"
-	"math/rand"
-	"time"
 
 	"../reference/Maps"
 	"github.com/mndrix/golog"
@@ -56,7 +54,7 @@ func Reset() {
 }
 
 /* Get only free direction */
-func FreeDir() []string {
+func FreeDir() bool {
 	var freeDir []string
 
 	if !actualMachine.CanProve("busy(w).") {
@@ -83,7 +81,7 @@ func FreeDir() []string {
 	if !actualMachine.CanProve("busy(se).") {
 		freeDir = append(freeDir, "SE")
 	}
-	return freeDir	//return freeDir
+	return actualMachine.CanProve("busy(se).")	//return freeDir
 }
 
 func SetDirOfMap(){
@@ -101,23 +99,25 @@ func SetDirOfMap(){
 	if(DIR.SouthWest == "#") { AssertBusy("sw") }
 	if(DIR.West == "#") { AssertBusy("w") }
 	if(DIR.East == "=") { AssertBusy("e") }
+
+
+	//actualMachine.Consult("busy(se).")
+
+	fmt.Println("test",actualMachine.CanProve("busy(se)."))
+
 	
-	fmt.Println(actualMachine.CanProve("busy(e)."))
-	AssertBusy("e")
-	fmt.Println(actualMachine.CanProve("busy(e)."))
-	fmt.Println(actualMachine.CanProve("busy(e)."))
 }
 
 /* Pick a random free direction */
 
-func RandFreeDir() string {
+/* func RandFreeDir() string {
 	var x = FreeDir()
 
 	s := rand.NewSource(time.Now().Unix())
 	r := rand.New(s)
 
 	return x[r.Intn(len(x))]
-}
+} */
 
 /* Check if an element is present in a list */
 func stringInSlice(a string, list []string) bool {
