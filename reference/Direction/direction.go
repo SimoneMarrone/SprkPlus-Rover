@@ -112,5 +112,4 @@ func MoveInDirection(direction string) {
 		}
 	}
 	maps.PrintMap()
-	ball.Stop()
 }
