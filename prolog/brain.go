@@ -47,6 +47,7 @@ func AssertBusy(b string) {
 	rollbackMachine = actualMachine
 
 	actualMachine = actualMachine.Consult("busy(" + b + ").")
+	//fmt.Println("Test direzione busy %t", actualMachine.CanProve("busy("+b+")."))
 }
 
 /* Method to erase state */
@@ -99,10 +100,12 @@ func SetDirOfMap(){
 	if(DIR.SouthEast == "#") { AssertBusy("se") }
 	if(DIR.SouthWest == "#") { AssertBusy("sw") }
 	if(DIR.West == "#") { AssertBusy("w") }
-	if(DIR.East == "#") { AssertBusy("e") }
-	 
-	fmt.Println("East %t",actualMachine.CanProve("free(e)."))
-	fmt.Println("Ovest %t",actualMachine.CanProve("free(w)."))
+	if(DIR.East == "=") { AssertBusy("e") }
+	
+	fmt.Println(actualMachine.CanProve("free(e)."))
+	AssertBusy("e")
+	fmt.Println(actualMachine.CanProve("busy(e)."))
+	fmt.Println(actualMachine.CanProve("free(e)."))
 }
 
 /* Pick a random free direction */

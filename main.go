@@ -32,8 +32,8 @@ func main() {
 	//main function for sprk
 	work := func() {
 		
-		prolog.AssertBusy("w")
-		fmt.Printf("%t",prolog.CheckDirection("w"))
+		//prolog.AssertBusy("w")
+		//fmt.Printf("%t",prolog.CheckDirection("w"))
 
 		prolog.SetDirOfMap()
 		fmt.Printf("%s",prolog.FreeDir())
