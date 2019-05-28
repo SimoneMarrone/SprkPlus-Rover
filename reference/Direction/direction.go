@@ -116,11 +116,7 @@ func MoveInDirection(direction string) {
 
 			/* Tempo di collisione */
 			elapsed := time.Since(start)
-			elapsed.Seconds()
-
-			/* Metri percorsi */
-			mRide := elapsed.Seconds()
-			fmt.Printf("mRide %f \n", mRide)
+			fmt.Printf("mRide %f \n", elapsed.Seconds())
 		}
 	}
 	maps.PrintMap()
