@@ -1,6 +1,7 @@
 package direction
 
 import (
+	"fmt"
 	"time"
 
 	"../Maps"
@@ -9,7 +10,6 @@ import (
 
 const ms float64 = 0.4347826
 const wait time.Duration = 3000
-const speed uint8 = 30
 const interval int = 5
 
 /* DRIVER */
@@ -75,7 +75,7 @@ func setPosition(direction string) {
 }
 
 /* Movimento ball nella direzione selezionata */
-func MoveInDirection(direction string) {
+func MoveInDirection(direction string, speed uint8) {
 	/* Colore RGB - verde */
 	ball.SetRGB(0, 128, 0)
 
@@ -84,25 +84,24 @@ func MoveInDirection(direction string) {
 	ball.Roll(0, getGradeDirection(direction))
 	time.Sleep(wait / 2 * time.Millisecond)
 	ball.Roll(speed, getGradeDirection(direction))
-	//start := time.Now()
 
+	start := time.Now()
 	ball.On("collision", func(data interface{}) {
 
 		/* Colore RGB - rosso */
 		ball.SetRGB(255, 0, 0)
 
 		/* Tempo di collisione */
-		//elapsed := time.Since(start)
+		elapsed := time.Since(start)
 
 		/* Metri percorsi */
 		//mRide := (elapsed.Seconds() * ms) - elapsed.Seconds()
-		//fmt.Printf("mRide %f \n", mRide)
+		mRide := elapsed.Seconds() * ms
+		fmt.Printf("Tempo di collisione %f \n", mRide)
 
 		for i := 0; i < interval; i++ {
 			setPosition(direction)
 		}
-
-		//if mRide
 		//maps.SetObstacle()
 	})
 	maps.PrintMap()
