@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"time"
+	"bufio"
+	"strings"
 
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/ble"
@@ -34,8 +36,7 @@ func main() {
 		/* Tempo di collisione */
 		elapsed := time.Since(direction.Start)
 
-		/* Metri percorsi */
-		//mRide := (elapsed.Seconds() * Ms) - elapsed.Seconds()
+		/* Cm percorsi */
 		mRide := elapsed.Seconds() * direction.Ms
 		fmt.Printf("Tempo di collisione %f \n", mRide)
 
@@ -43,30 +44,51 @@ func main() {
 			//setPosition(direction)
 		}
 		//maps.SetObstacle()
+		
 	})
-
+	
 	//setting ball to direction library
 	direction.SetBall(ball)
 
 	//map init
-	maps.InitMap()
-	maps.PrintMap()
-
+	Maps.InitMap()
+	Maps.PrintMap()
+	
 	//main function for sprk
 	work := func() {
 
 		//prolog.AssertBusy("w")
 		//fmt.Printf("%t",prolog.CheckDirection("w"))
 
-		prolog.SetDirOfMap()
-		fmt.Printf("%s", prolog.FreeDir())
-
+		
 		//fmt.Printf("%s",prolog.FreeDir())
 		//taking direction
-		for {
-			direction.MoveInDirection("N", 30)
-			direction.Start := time.Now()
-			direction.MoveInDirection("S", 30)
+			//Running mode
+
+		fmt.Println("Parametri: ",len(os.Args))
+		if(len(os.Args) > 2){
+			switch os.Args[2] {
+			case "no-blt":
+				break
+			case "interactive":
+				direction.Wait = 500
+				for{
+					buf := bufio.NewReader(os.Stdin)
+					fmt.Print("> ")
+					sentence, _ := buf.ReadString('\n')
+					sentence = strings.Replace(sentence, "\n", "", -1)
+					fmt.Println(sentence)
+					direction.MoveInDirection(string(sentence),30)
+				} 
+				break
+			}
+		}else{
+			for {
+				prolog.SetDirOfMap()
+				direction.Start = time.Now()	
+				prolog.MakeMove()
+				prolog.Reset()
+			}
 		}
 	}
 

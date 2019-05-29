@@ -2,10 +2,25 @@ package prolog
 
 import (
 	"fmt"
+	"time"
+	"math/rand"
 
 	"../reference/Maps"
 	"github.com/mndrix/golog"
+	"../reference/Direction"
 )
+
+/* Coordinate ostacoli */
+type Direction struct {
+	North     map[string]bool
+	South     map[string]bool
+	East      map[string]bool
+	West      map[string]bool
+	NorthWest map[string]bool
+	SouthWest map[string]bool
+	NorthEast map[string]bool
+	SouthEast map[string]bool
+}
 
 /* All direction are available in this state of Db */
 var cleanMachine = golog.NewMachine().Consult("busy(X):-blocked(X). blocked(init).")
@@ -15,28 +30,6 @@ var actualMachine = cleanMachine
 
 /* Machine used for rollback */
 var rollbackMachine = cleanMachine
-
-/* Method to check if direction is busy */
-func CheckDirection(x string) bool{
-
-	var solutions = actualMachine.ProveAll("busy(X).")
-	var solutionlist []string
-
-	for _, solution := range solutions {
-
-		var s = solution.ByName_("X").String()
-		solutionlist = append(solutionlist, s)
-	}
-
-	if stringInSlice(x, solutionlist) {
-		fmt.Println(x + " is busy")
-		return false
-	} else {
-		fmt.Println(x + " is free")
-		return true
-	}
-
-}
 
 /* Method to assert passed location as busy */
 func AssertBusy(b string) {
@@ -54,7 +47,7 @@ func Reset() {
 }
 
 /* Get only free direction */
-func FreeDir() bool {
+func FreeDir() []string {
 	var freeDir []string
 
 	if !actualMachine.CanProve("busy(w).") {
@@ -81,43 +74,73 @@ func FreeDir() bool {
 	if !actualMachine.CanProve("busy(se).") {
 		freeDir = append(freeDir, "SE")
 	}
-	return actualMachine.CanProve("busy(se).")	//return freeDir
+	return freeDir
 }
 
 func SetDirOfMap(){
 	
 	// N - S - E - O - NO - SO - NE - SE
 	//var DIR = [8]string {"N","S","E","O","NO","SO","NE","SE"}
+	var DIR Maps.CoordObstacle = Maps.LookAround()
 	
-	var DIR maps.CoordObstacle = maps.LookRound()
+	_directions := Direction{
+		North :    make(map[string]bool),
+		South:     make(map[string]bool),
+		East:      make(map[string]bool),
+		West:      make(map[string]bool),
+		NorthWest: make(map[string]bool),
+		SouthWest: make(map[string]bool),
+		NorthEast: make(map[string]bool),
+		SouthEast: make(map[string]bool)}
+		
+	for index, b := range DIR.North {
+		if(DIR.North[index] == "#"){ _directions.North[string(index-1)] = false } else { _directions.North[string(index-1)] = true }
+		if(DIR.South[index] == "#"){ _directions.South[string(index-1)] = false } else { _directions.South[string(index-1)] = true }
+		if(DIR.East[index] == "#"){ _directions.East[string(index-1)] = false } else { _directions.East[string(index-1)] = true }
+		if(DIR.West[index] == "#"){ _directions.West[string(index-1)] = false } else { _directions.West[string(index-1)] = true }
+		if(DIR.NorthWest[index] == "#"){ _directions.NorthWest[string(index-1)] = false } else { _directions.NorthWest[string(index-1)] = true }
+		if(DIR.SouthWest[index] == "#"){ _directions.SouthWest[string(index-1)] = false } else { _directions.SouthWest[string(index-1)] = true }
+		if(DIR.NorthEast[index] == "#"){ _directions.NorthEast[string(index-1)] = false } else { _directions.NorthEast[string(index-1)] = true }
+		if(DIR.SouthEast[index] == "#"){ _directions.SouthEast[string(index-1)] = false } else { _directions.SouthWest[string(index-1)] = true }
+		if b == "#" {
+			fmt.Println("Ostacolo a distanza: ", index)
+		}
+	}
+		
 
-	if(DIR.North == "#") { AssertBusy("n") }
-	if(DIR.NorthEast == "#") { AssertBusy("ne") }
-	if(DIR.NorthWest == "#") { AssertBusy("nw") }
-	if(DIR.South == "#") { AssertBusy("s") }
-	if(DIR.SouthEast == "#") { AssertBusy("se") }
-	if(DIR.SouthWest == "#") { AssertBusy("sw") }
-	if(DIR.West == "#") { AssertBusy("w") }
-	if(DIR.East == "=") { AssertBusy("e") }
+	fmt.Println(_directions.North["ciao"])
 
-
-	//actualMachine.Consult("busy(se).")
-
-	fmt.Println("test",actualMachine.CanProve("busy(se)."))
-
+ 
+	fmt.Println("Direzione nord: ", DIR)
 	
+	fmt.Println("Direzioni disponibili: ",FreeDir())
+
+	fmt.Println("Sto andando a: ", RandFreeDir())
+
 }
 
 /* Pick a random free direction */
 
-/* func RandFreeDir() string {
+func RandFreeDir() string {
 	var x = FreeDir()
 
 	s := rand.NewSource(time.Now().Unix())
 	r := rand.New(s)
 
-	return x[r.Intn(len(x))]
-} */
+	if(len(x) > 0){
+		return x[r.Intn(len(x))]
+	}
+	fmt.Println("------------------------")
+	fmt.Println("No direction available!!")
+	fmt.Println("------------------------")
+	return "error"
+
+}
+
+func MakeMove(){
+	direction.MaxSpeed_Mov(RandFreeDir())
+	fmt.Println("Movement finished.")
+}
 
 /* Check if an element is present in a list */
 func stringInSlice(a string, list []string) bool {

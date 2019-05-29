@@ -1,17 +1,19 @@
 package direction
 
 import (
+	"strings"
 	"time"
 
 	"../Maps"
 	"gobot.io/x/gobot/platforms/sphero/ollie"
 )
 
-const Ms float64 = 0.4347826
-const Wait time.Duration = 3000
+const Ms float64 = 27
+var Wait time.Duration = 3000
 const Interval int = 5
 
 var Start time.Time
+
 /* DRIVER */
 var ball *ollie.Driver
 
@@ -20,7 +22,7 @@ func SetBall(mainBall *ollie.Driver) {
 }
 
 func getGradeDirection(direction string) uint16 {
-	switch direction {
+	switch strings.ToUpper(direction) {
 	case "NE":
 		return 45
 	case "NW":
@@ -43,33 +45,33 @@ func getGradeDirection(direction string) uint16 {
 }
 
 func setPosition(direction string) {
-	switch direction {
+	switch strings.ToUpper(direction) {
 	case "NE":
-		maps.MoveNorthEast()
+		Maps.MoveNorthEast()
 		break
 	case "NW":
-		maps.MoveNorthWest()
+		Maps.MoveNorthWest()
 		break
 	case "SE":
-		maps.MoveSouthEast()
+		Maps.MoveSouthEast()
 		break
 	case "SW":
-		maps.MoveSouthWest()
+		Maps.MoveSouthWest()
 		break
 	case "W":
-		maps.MoveWest()
+		Maps.MoveWest()
 		break
 	case "E":
-		maps.MoveEast()
+		Maps.MoveEast()
 		break
 	case "N":
-		maps.MoveNorth()
+		Maps.MoveNorth()
 		break
 	case "S":
-		maps.MoveSouth()
+		Maps.MoveSouth()
 		break
 	default:
-		maps.MoveNorth()
+		Maps.MoveNorth()
 		break
 	}
 }
@@ -85,7 +87,5 @@ func MoveInDirection(direction string, speed uint8) {
 	time.Sleep(Wait / 2 * time.Millisecond)
 	ball.Roll(speed, getGradeDirection(direction))
 
-	Start := time.Now()
-	_ = Start
-	maps.PrintMap()
+	Maps.PrintMap()
 }

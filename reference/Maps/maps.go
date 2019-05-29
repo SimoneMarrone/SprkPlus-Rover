@@ -1,8 +1,8 @@
 /**
-	MAPS  ROBOT
+	Maps  ROBOT
 **/
 
-package maps
+package Maps
 
 import (
 	"fmt"
@@ -11,11 +11,11 @@ import (
 )
 
 /* Dimensione mappa  */
-const dimensionMap = 25
+const dimensionMap = 20
 const square = "="
 
 /* Array mappa con attuale posizione robot */
-var maps [dimensionMap][dimensionMap]string
+var Maps [dimensionMap][dimensionMap]string
 var currentPositionX int
 var currentPositionY int
 
@@ -36,7 +36,7 @@ func InitMap() {
 
 	for i := 0; i < dimensionMap; i++ {
 		for j := 0; j < dimensionMap; j++ {
-			maps[i][j] = square
+			Maps[i][j] = square
 		}
 	}
 
@@ -48,7 +48,7 @@ func setPositiontRobot(x int, y int) {
 
 	currentPositionX = x
 	currentPositionY = y
-	
+
 	checkMapLimit()
 }
 
@@ -61,10 +61,10 @@ func checkMapLimit() {
 			for j := 0; j < dimensionMap; j++ {
 
 				if i == dimensionMap-1 {
-					maps[i-1][j] = maps[i][j]
-					maps[dimensionMap-1][j] = square
+					Maps[i-1][j] = Maps[i][j]
+					Maps[dimensionMap-1][j] = square
 				} else {
-					maps[i-1][j] = maps[i][j]
+					Maps[i-1][j] = Maps[i][j]
 				}
 			}
 		}
@@ -79,28 +79,28 @@ func checkMapLimit() {
 			for j := 1; j < dimensionMap; j++ {
 
 				if j == dimensionMap-1 {
-					maps[i][j-1] = maps[i][j]
-					maps[i][dimensionMap-1] = square
+					Maps[i][j-1] = Maps[i][j]
+					Maps[i][dimensionMap-1] = square
 				} else {
-					maps[i][j-1] = maps[i][j]
+					Maps[i][j-1] = Maps[i][j]
 				}
 			}
 		}
 
 		currentPositionY--
 
-	} 
-	
+	}
+
 	if currentPositionX < 0 {
 
 		for i := dimensionMap - 1; i > 0; i-- {
 			for j := dimensionMap - 1; j >= 0; j-- {
 
 				if i == 1 {
-					maps[i][j] = maps[i-1][j]
-					maps[0][j] = square
+					Maps[i][j] = Maps[i-1][j]
+					Maps[0][j] = square
 				} else {
-					maps[i][j] = maps[i-1][j]
+					Maps[i][j] = Maps[i-1][j]
 				}
 			}
 		}
@@ -108,21 +108,21 @@ func checkMapLimit() {
 		currentPositionX++
 
 	}
-	
+
 	if currentPositionY < 0 {
 
 		for i := dimensionMap - 1; i >= 0; i-- {
 			for j := dimensionMap - 1; j > 0; j-- {
 
 				if i == 0 {
-					maps[i][j] = maps[i][j-1]
-					maps[0][j-1] = square
+					Maps[i][j] = Maps[i][j-1]
+					Maps[0][j-1] = square
 				} else {
-					maps[i][j] = maps[i][j-1]
+					Maps[i][j] = Maps[i][j-1]
 				}
 			}
 		}
-		
+
 		currentPositionY++
 	}
 }
@@ -130,14 +130,14 @@ func checkMapLimit() {
 /* Set ostacolo */
 func SetObstacle() {
 
-	maps[currentPositionX][currentPositionY] = "#"
+	Maps[currentPositionX][currentPositionY] = "#"
 }
 
 /* Get ostacoli su posizione robot */
-func LookRound() CoordObstacle {
+func LookAround() CoordObstacle {
 
-	var tempCurrentPositionX int = currentPositionX
-	var tempCurrentPositionY int = currentPositionY
+	var tempCurrentPositionX = currentPositionX
+	var tempCurrentPositionY = currentPositionY
 
 	if currentPositionX <= 0 {
 
@@ -155,19 +155,19 @@ func LookRound() CoordObstacle {
 	}
 
 	if currentPositionY >= dimensionMap-1 {
-		
+
 		tempCurrentPositionY--
 	}
 
 	coord := CoordObstacle{
-		North:     maps[tempCurrentPositionX-1][tempCurrentPositionY],
-		South:     maps[tempCurrentPositionX+1][tempCurrentPositionY],
-		East:      maps[tempCurrentPositionX][tempCurrentPositionY+1],
-		West:      maps[tempCurrentPositionX][tempCurrentPositionY-1],
-		NorthWest: maps[tempCurrentPositionX-1][tempCurrentPositionY-1],
-		SouthWest: maps[tempCurrentPositionX+1][tempCurrentPositionY-1],
-		NorthEast: maps[tempCurrentPositionX-1][tempCurrentPositionY+1],
-		SouthEast: maps[tempCurrentPositionX+1][tempCurrentPositionY+1]}
+		North:     Maps[tempCurrentPositionX-1][tempCurrentPositionY],
+		South:     Maps[tempCurrentPositionX+1][tempCurrentPositionY],
+		East:      Maps[tempCurrentPositionX][tempCurrentPositionY+1],
+		West:      Maps[tempCurrentPositionX][tempCurrentPositionY-1],
+		NorthWest: Maps[tempCurrentPositionX-1][tempCurrentPositionY-1],
+		SouthWest: Maps[tempCurrentPositionX+1][tempCurrentPositionY-1],
+		NorthEast: Maps[tempCurrentPositionX-1][tempCurrentPositionY+1],
+		SouthEast: Maps[tempCurrentPositionX+1][tempCurrentPositionY+1]}
 
 	return coord
 }
@@ -232,12 +232,12 @@ func PrintMap() {
 		fmt.Printf("\n")
 
 		for j := 0; j < dimensionMap; j++ {
-			fmt.Printf("%s ", maps[i][j])
+			fmt.Printf("%s ", Maps[i][j])
 		}
 	}
 
 	fmt.Printf("\n\n## Posizione Robot ##\n")
 	fmt.Printf("Posizione X: %d \n", currentPositionX)
 	fmt.Printf("Posizione Y: %d \n\n", currentPositionY)
-	fmt.Printf("OSTACOLI: %s \n", LookRound())
+	fmt.Printf("OSTACOLI: %s \n", LookAround())
 }
