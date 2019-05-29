@@ -13,6 +13,7 @@ import (
 /* Dimensione mappa  */
 const dimensionMap = 20
 const square = "="
+const maxMemory = 6
 
 /* Array mappa con attuale posizione robot */
 var Maps [dimensionMap][dimensionMap]string
@@ -21,14 +22,14 @@ var currentPositionY int
 
 /* Coordinate ostacoli */
 type CoordObstacle struct {
-	North     string
-	South     string
-	East      string
-	West      string
-	NorthWest string
-	SouthWest string
-	NorthEast string
-	SouthEast string
+	North     []string
+	South     []string
+	East      []string
+	West      []string
+	NorthWest []string
+	SouthWest []string
+	NorthEast []string
+	SouthEast []string
 }
 
 /*Inizializzazione mappa con misure*/
@@ -159,15 +160,28 @@ func LookAround() CoordObstacle {
 		tempCurrentPositionY--
 	}
 
+	var north, south, east, west, northWest, southWest, northEast, southEast []string
+
+	for i := 0; i < maxMemory; i++ {
+		north = append(north, Maps[tempCurrentPositionX-(1+i)][tempCurrentPositionY])
+		south = append(north, Maps[tempCurrentPositionX+(1+i)][tempCurrentPositionY])
+		east = append(north, Maps[tempCurrentPositionX][tempCurrentPositionY+(1+i)])
+		west = append(north, Maps[tempCurrentPositionX][tempCurrentPositionY-(1+i)])
+		northWest = append(north, Maps[tempCurrentPositionX-(1+i)][tempCurrentPositionY-(1+i)])
+		southWest = append(north, Maps[tempCurrentPositionX+(1+i)][tempCurrentPositionY-(1+i)])
+		northEast = append(north, Maps[tempCurrentPositionX-(1+i)][tempCurrentPositionY+(1+i)])
+		southEast = append(north, Maps[tempCurrentPositionX+(1+i)][tempCurrentPositionY+(1+i)])
+	}
+
 	coord := CoordObstacle{
-		North:     Maps[tempCurrentPositionX-1][tempCurrentPositionY],
-		South:     Maps[tempCurrentPositionX+1][tempCurrentPositionY],
-		East:      Maps[tempCurrentPositionX][tempCurrentPositionY+1],
-		West:      Maps[tempCurrentPositionX][tempCurrentPositionY-1],
-		NorthWest: Maps[tempCurrentPositionX-1][tempCurrentPositionY-1],
-		SouthWest: Maps[tempCurrentPositionX+1][tempCurrentPositionY-1],
-		NorthEast: Maps[tempCurrentPositionX-1][tempCurrentPositionY+1],
-		SouthEast: Maps[tempCurrentPositionX+1][tempCurrentPositionY+1]}
+		North:     north,
+		South:     south,
+		East:      east,
+		West:      west,
+		NorthWest: northWest,
+		SouthWest: southWest,
+		NorthEast: northEast,
+		SouthEast: southEast}
 
 	return coord
 }
