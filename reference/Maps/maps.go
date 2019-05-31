@@ -253,5 +253,5 @@ func PrintMap() {
 	fmt.Printf("\n\n## Posizione Robot ##\n")
 	fmt.Printf("Posizione X: %d \n", currentPositionX)
 	fmt.Printf("Posizione Y: %d \n\n", currentPositionY)
-	fmt.Printf("OSTACOLI: %s \n", LookAround())
+	//fmt.Printf("OSTACOLI: %s \n", LookAround())
 }

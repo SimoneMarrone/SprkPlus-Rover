@@ -53,25 +53,25 @@ func main() {
 	//map init
 	Maps.InitMap()
 	Maps.PrintMap()
-	
-	//main function for sprk
+
 	work := func() {
+		for {
+			prolog.SetDirOfMap()
+			direction.Start = time.Now()	
+			prolog.MakeMove()
+			prolog.Reset()
+		}
+	}
 
-		//prolog.AssertBusy("w")
-		//fmt.Printf("%t",prolog.CheckDirection("w"))
-
-		
-		//fmt.Printf("%s",prolog.FreeDir())
-		//taking direction
-			//Running mode
-
-		fmt.Println("Parametri: ",len(os.Args))
-		if(len(os.Args) > 2){
-			switch os.Args[2] {
-			case "no-blt":
-				break
-			case "interactive":
-				direction.Wait = 500
+	if(len(os.Args) > 2){
+		switch os.Args[2] {
+		case "no-blt":
+			for{
+				work()
+			}
+		case "interactive":
+			direction.Wait = 500
+			work := func(){
 				for{
 					buf := bufio.NewReader(os.Stdin)
 					fmt.Print("> ")
@@ -79,26 +79,28 @@ func main() {
 					sentence = strings.Replace(sentence, "\n", "", -1)
 					fmt.Println(sentence)
 					direction.MoveInDirection(string(sentence),30)
-				} 
-				break
-			}
-		}else{ //normal execution
-			for {
-				prolog.SetDirOfMap()
-				direction.Start = time.Now()	
-				prolog.MakeMove()
-				prolog.Reset()
-			}
+				}	
+			} 
+			//New adapter
+			robot := gobot.NewRobot("sprkplus",
+			[]gobot.Connection{bleAdaptor},
+			[]gobot.Device{ball},
+			work,)
+			
+			robot.Start()
+			
+			break
 		}
-	}
-
+	}else{ //normal execution
+		
 	//New adapter
 	robot := gobot.NewRobot("sprkplus",
-		[]gobot.Connection{bleAdaptor},
-		[]gobot.Device{ball},
-		work,
-	)
-
+	[]gobot.Connection{bleAdaptor},
+	[]gobot.Device{ball},
+	work,
+)
+	
 	robot.Start()
-
+	}
+	
 }
