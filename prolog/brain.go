@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 	"math/rand"
+	"strconv"
 
 	"../reference/Maps"
 	"github.com/mndrix/golog"
@@ -31,6 +32,8 @@ var actualMachine = cleanMachine
 /* Machine used for rollback */
 var rollbackMachine = cleanMachine
 
+var _directions Direction
+
 /* Method to assert passed location as busy */
 func AssertBusy(b string) {
 
@@ -47,33 +50,36 @@ func Reset() {
 }
 
 /* Get only free direction */
-func FreeDir() []string {
-	var freeDir []string
+func FreeDir() [][2]string {
+	var freeDir [][2]string
+	
+	if(GetAvailableMov(_directions.North)!=0){ 
+		freeDir = append(freeDir,[2]string{"N",strconv.Itoa(GetAvailableMov(_directions.North))})
+	}
+	if(GetAvailableMov(_directions.NorthEast)!=0){ 
+		freeDir = append(freeDir,[2]string{"NE",strconv.Itoa(GetAvailableMov(_directions.NorthEast))})
+	}
+	if(GetAvailableMov(_directions.NorthWest)!=0){
+		freeDir = append(freeDir,[2]string{"NW",strconv.Itoa(GetAvailableMov(_directions.NorthWest))})
+	}
+	if(GetAvailableMov(_directions.South)!=0){ 
+		freeDir = append(freeDir,[2]string{"S",strconv.Itoa(GetAvailableMov(_directions.South))})
+	}
+	if(GetAvailableMov(_directions.SouthWest)!=0){ 
+		freeDir = append(freeDir,[2]string{"SW",strconv.Itoa(GetAvailableMov(_directions.SouthWest))})
+	}
+	if(GetAvailableMov(_directions.SouthEast)!=0){ 
+		freeDir = append(freeDir,[2]string{"SE",strconv.Itoa(GetAvailableMov(_directions.SouthEast))})
+	}
+	if(GetAvailableMov(_directions.East)!=0){ 
+		freeDir = append(freeDir,[2]string{"E",strconv.Itoa(GetAvailableMov(_directions.East))})
+	}
+	if(GetAvailableMov(_directions.West)!=0){ 
+		freeDir = append(freeDir,[2]string{"W",strconv.Itoa(GetAvailableMov(_directions.West))})
+	}
 
-	if !actualMachine.CanProve("busy(w).") {
-		freeDir = append(freeDir, "W")
-	}
-	if !actualMachine.CanProve("busy(e).") {
-		freeDir = append(freeDir, "E")
-	}
-	if !actualMachine.CanProve("busy(n).") {
-		freeDir = append(freeDir, "N")
-	}
-	if !actualMachine.CanProve("busy(nw).") {
-		freeDir = append(freeDir, "NW")
-	}
-	if !actualMachine.CanProve("busy(ne).") {
-		freeDir = append(freeDir, "NE")
-	}
-	if !actualMachine.CanProve("busy(s).") {
-		freeDir = append(freeDir, "S")
-	}
-	if !actualMachine.CanProve("busy(sw).") {
-		freeDir = append(freeDir, "SW")
-	}
-	if !actualMachine.CanProve("busy(se).") {
-		freeDir = append(freeDir, "SE")
-	}
+	fmt.Println("Prova direzione disponibile: ",strconv.Itoa(GetAvailableMov(_directions.West)))
+
 	return freeDir
 }
 
@@ -83,7 +89,7 @@ func SetDirOfMap(){
 	//var DIR = [8]string {"N","S","E","O","NO","SO","NE","SE"}
 	var DIR Maps.CoordObstacle = Maps.LookAround()
 	
-	_directions := Direction{
+	_directions = Direction{
 		North :    make(map[string]bool),
 		South:     make(map[string]bool),
 		East:      make(map[string]bool),
@@ -93,23 +99,23 @@ func SetDirOfMap(){
 		NorthEast: make(map[string]bool),
 		SouthEast: make(map[string]bool)}
 		
-	for index, b := range DIR.North {
-		if(DIR.North[index] == "#"){ _directions.North[string(index-1)] = false } else { _directions.North[string(index-1)] = true }
-		if(DIR.South[index] == "#"){ _directions.South[string(index-1)] = false } else { _directions.South[string(index-1)] = true }
-		if(DIR.East[index] == "#"){ _directions.East[string(index-1)] = false } else { _directions.East[string(index-1)] = true }
-		if(DIR.West[index] == "#"){ _directions.West[string(index-1)] = false } else { _directions.West[string(index-1)] = true }
-		if(DIR.NorthWest[index] == "#"){ _directions.NorthWest[string(index-1)] = false } else { _directions.NorthWest[string(index-1)] = true }
-		if(DIR.SouthWest[index] == "#"){ _directions.SouthWest[string(index-1)] = false } else { _directions.SouthWest[string(index-1)] = true }
-		if(DIR.NorthEast[index] == "#"){ _directions.NorthEast[string(index-1)] = false } else { _directions.NorthEast[string(index-1)] = true }
-		if(DIR.SouthEast[index] == "#"){ _directions.SouthEast[string(index-1)] = false } else { _directions.SouthWest[string(index-1)] = true }
-		if b == "#" {
-			fmt.Println("Ostacolo a distanza: ", index)
+	for index, _ := range DIR.North {
+		var movement_string = "can" + strconv.Itoa(index+1)
+		if(index+1 == 1 || index+1 == 3 || index+1 == 6){
+			if(DIR.North[index] == "#"){ _directions.North[movement_string] = false } else { _directions.North[movement_string] = true }
+			if(DIR.South[index] == "#"){ _directions.South[movement_string] = false } else { _directions.South[movement_string] = true }
+			if(DIR.East[index] == "#"){ _directions.East[movement_string] = false } else { _directions.East[movement_string] = true }
+			if(DIR.West[index] == "#"){ _directions.West[movement_string] = false } else { _directions.West[movement_string] = true }
+			if(DIR.NorthWest[index] == "#"){ _directions.NorthWest[movement_string] = false } else { _directions.NorthWest[movement_string] = true }
+			if(DIR.SouthWest[index] == "#"){ _directions.SouthWest[movement_string] = false } else { _directions.SouthWest[movement_string] = true }
+			if(DIR.NorthEast[index] == "#"){ _directions.NorthEast[movement_string] = false } else { _directions.NorthEast[movement_string] = true }
+			if(DIR.SouthEast[index] == "#"){ _directions.SouthEast[movement_string] = false } else { _directions.SouthWest[movement_string] = true }
+		} else{
+			continue
 		}
 	}
 		
-
-	fmt.Println(_directions.North["ciao"])
-
+	fmt.Println("Can 2 ",_directions.North["can2"])
  
 	fmt.Println("Direzione nord: ", DIR)
 	
@@ -119,6 +125,29 @@ func SetDirOfMap(){
 
 }
 
+/* Returns max free squares (1-3-6) */
+func GetAvailableMov(m map[string]bool) int{
+	var movement_type int = 0
+
+	for index, _ := range m {
+		switch index {
+			case "can1":
+				if(m[index]){
+					movement_type = 1
+				}
+			case "can3":
+				if(m[index]){
+					movement_type = 3
+				}
+			case "can6":
+				if(m[index]){
+					movement_type = 6
+				}
+		}
+	}
+	return movement_type
+}
+
 /* Pick a random free direction */
 
 func RandFreeDir() string {
@@ -126,10 +155,12 @@ func RandFreeDir() string {
 
 	s := rand.NewSource(time.Now().Unix())
 	r := rand.New(s)
-
+	_ = r
+	_ = x
+	/* 
 	if(len(x) > 0){
-		return x[r.Intn(len(x))]
-	}
+		return x[r.Intn(len(x))][0]
+	} */
 	fmt.Println("------------------------")
 	fmt.Println("No direction available!!")
 	fmt.Println("------------------------")

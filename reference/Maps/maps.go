@@ -164,13 +164,13 @@ func LookAround() CoordObstacle {
 
 	for i := 0; i < maxMemory; i++ {
 		north = append(north, Maps[tempCurrentPositionX-(1+i)][tempCurrentPositionY])
-		south = append(north, Maps[tempCurrentPositionX+(1+i)][tempCurrentPositionY])
-		east = append(north, Maps[tempCurrentPositionX][tempCurrentPositionY+(1+i)])
-		west = append(north, Maps[tempCurrentPositionX][tempCurrentPositionY-(1+i)])
-		northWest = append(north, Maps[tempCurrentPositionX-(1+i)][tempCurrentPositionY-(1+i)])
-		southWest = append(north, Maps[tempCurrentPositionX+(1+i)][tempCurrentPositionY-(1+i)])
-		northEast = append(north, Maps[tempCurrentPositionX-(1+i)][tempCurrentPositionY+(1+i)])
-		southEast = append(north, Maps[tempCurrentPositionX+(1+i)][tempCurrentPositionY+(1+i)])
+		south = append(south, Maps[tempCurrentPositionX+(1+i)][tempCurrentPositionY])
+		east = append(east, Maps[tempCurrentPositionX][tempCurrentPositionY+(1+i)])
+		west = append(west, Maps[tempCurrentPositionX][tempCurrentPositionY-(1+i)])
+		northWest = append(northWest, Maps[tempCurrentPositionX-(1+i)][tempCurrentPositionY-(1+i)])
+		southWest = append(southWest, Maps[tempCurrentPositionX+(1+i)][tempCurrentPositionY-(1+i)])
+		northEast = append(northEast, Maps[tempCurrentPositionX-(1+i)][tempCurrentPositionY+(1+i)])
+		southEast = append(southEast, Maps[tempCurrentPositionX+(1+i)][tempCurrentPositionY+(1+i)])
 	}
 
 	coord := CoordObstacle{

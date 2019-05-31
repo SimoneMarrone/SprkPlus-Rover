@@ -82,7 +82,7 @@ func main() {
 				} 
 				break
 			}
-		}else{
+		}else{ //normal execution
 			for {
 				prolog.SetDirOfMap()
 				direction.Start = time.Now()	
