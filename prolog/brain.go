@@ -5,6 +5,7 @@ import (
 	"time"
 	"math/rand"
 	"strconv"
+	"reflect"
 
 	"../reference/Maps"
 	"github.com/mndrix/golog"
@@ -24,7 +25,34 @@ type Direction struct {
 }
 
 /* All direction are available in this state of Db */
-var cleanMachine = golog.NewMachine().Consult("busy(X):-blocked(X). blocked(init).")
+var cleanMachine = golog.NewMachine().Consult(
+"available(X,Y):- inited(X,Y), \\+ blocked(X,Y). "+ // inited and not blocked
+"inited(n,1)."+
+"inited(n,3)."+
+"inited(n,6)."+
+"inited(s,1)."+
+"inited(s,3)."+
+"inited(s,6)."+
+"inited(w,1)."+
+"inited(w,3)."+
+"inited(w,6)."+
+"inited(e,1)."+
+"inited(e,3)."+
+"inited(e,6)."+
+"inited(nw,1)."+
+"inited(nw,3)."+
+"inited(nw,6)."+
+"inited(ne,1)."+
+"inited(ne,3)."+
+"inited(ne,6)."+
+"inited(sw,1)."+
+"inited(sw,3)."+
+"inited(sw,6)."+
+"inited(se,1)."+
+"inited(se,3)."+
+"inited(se,6)."+
+//"blocked(se,6)."+
+"blocked(init,0).")
 
 /* Machine used for runtime work */
 var actualMachine = cleanMachine
@@ -34,13 +62,13 @@ var rollbackMachine = cleanMachine
 
 var _directions Direction
 
-/* Method to assert passed location as busy */
-func AssertBusy(b string) {
+/* Method to assert passed location as busy --> Hit obstacle */
+func AssertBusy(direction string, distance string ) {
 
 	/* saving state for rollback */
 	rollbackMachine = actualMachine
 
-	actualMachine = actualMachine.Consult("blocked(" + b + ").")
+	actualMachine = actualMachine.Consult("blocked(" + direction + "," + distance + ").")
 	//fmt.Println("Test direzione busy %t", actualMachine.CanProve("busy("+b+")."))
 }
 
@@ -50,21 +78,23 @@ func Reset() {
 }
 
 /* Get only free direction */
-func FreeDir() [][2]string {
-	var freeDir [][2]string
+func FreeDir() map[string]int {
 	
-	if(GetAvailableMov(_directions.North)!=0){ freeDir = append(freeDir,[2]string{"N",strconv.Itoa(GetAvailableMov(_directions.North))}) }
-	if(GetAvailableMov(_directions.NorthEast)!=0){ freeDir = append(freeDir,[2]string{"NE",strconv.Itoa(GetAvailableMov(_directions.NorthEast))}) } 
-	if(GetAvailableMov(_directions.NorthWest)!=0){ freeDir = append(freeDir,[2]string{"NW",strconv.Itoa(GetAvailableMov(_directions.NorthWest))}) }
-	if(GetAvailableMov(_directions.South)!=0){ freeDir = append(freeDir,[2]string{"S",strconv.Itoa(GetAvailableMov(_directions.South))}) }
-	if(GetAvailableMov(_directions.SouthWest)!=0){ freeDir = append(freeDir,[2]string{"SW",strconv.Itoa(GetAvailableMov(_directions.SouthWest))}) }
-	if(GetAvailableMov(_directions.SouthEast)!=0){ freeDir = append(freeDir,[2]string{"SE",strconv.Itoa(GetAvailableMov(_directions.SouthEast))}) }
-	if(GetAvailableMov(_directions.East)!=0){ freeDir = append(freeDir,[2]string{"E",strconv.Itoa(GetAvailableMov(_directions.East))}) }
-	if(GetAvailableMov(_directions.West)!=0){ freeDir = append(freeDir,[2]string{"W",strconv.Itoa(GetAvailableMov(_directions.West))}) }
+	_dir_map := make(map[string]int)
+	
+	_directions := actualMachine.ProveAll("available(X,Y).")
+	
+	for _, solution := range _directions {
+		
+		var _dir_key string = fmt.Sprintf("%s", solution.ByName_("X"))
+		_dist_available, _ := strconv.Atoi(fmt.Sprintf("%s", solution.ByName_("Y")))
 
-	//fmt.Println("Prova direzione disponibile: ",strconv.Itoa(GetAvailableMov(_directions.West)))
+		//fmt.Printf("%s can move by %s cells.\n", solution.ByName_("X"), solution.ByName_("Y"))
 
-	return freeDir
+		if (_dir_map[_dir_key] < _dist_available) { _dir_map[_dir_key] = _dist_available}
+	}
+
+	return _dir_map
 }
 
 func SetDirOfMap(){
@@ -98,52 +128,49 @@ func SetDirOfMap(){
 			continue
 		}
 	}
-	fmt.Println(FreeDir())
-}
-
-/* Returns max free squares (1-3-6) */
-func GetAvailableMov(m map[string]bool) int{
-
-	// Robot will take always the longest path available
-	if(m["can6"]) {return 6}
-	if(m["can3"]) {return 3}
-	if(m["can1"]) {return 1}
-
-	return 0
 }
 
 /* Pick a random free direction */
 
-func RandFreeDir() (string,string) {
-	var x = FreeDir()
-
+func RandFreeDir() (string,int) {
 	s := rand.NewSource(time.Now().Unix())
 	r := rand.New(s)
+
+	var x = FreeDir()
+
+	fmt.Println("Log mappa: ",x)
 	
 	if(len(x) > 0){
-		map_direction := x[r.Intn(len(x))]
-		return map_direction[0], map_direction[1]
+	
+		keys := reflect.ValueOf(x).MapKeys()
+		strkeys := make([]string, len(keys))
+	
+		for i := 0; i < len(keys); i++ {
+			strkeys[i] = keys[i].String()
+		}
+		
+		key := strkeys[r.Intn(len(x))]
+
+		return key, x[key]
 	}
 
 	fmt.Println("------------------------")
 	fmt.Println("No direction available!!")
 	fmt.Println("------------------------")
-
-	return "error","0"
-
+	return "error", 0
 }
 
 func MakeMove(){
 	d,s := RandFreeDir()
 
 	switch s {
-		case "1": 
+		case 1: 
 			direction.LowSpeed_Mov(d) 
 			break
-		case "3": 
+		case 3: 
 			direction.MidSpeed_Mov(d) 
 			break
-		case "6": 
+		case 6: 
 			direction.MaxSpeed_Mov(d) 
 			break
 	}
