@@ -9,7 +9,9 @@ import (
 )
 
 const Ms float64 = 27
+
 var Wait time.Duration = 3000
+
 const Interval int = 5
 
 var Start time.Time
@@ -44,7 +46,7 @@ func getGradeDirection(direction string) uint16 {
 	}
 }
 
-func setPosition(direction string) {
+func SetPosition(direction string) {
 	switch strings.ToUpper(direction) {
 	case "NE":
 		Maps.MoveNorthEast()

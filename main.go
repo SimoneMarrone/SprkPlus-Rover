@@ -19,6 +19,8 @@ import (
 
 func main() {
 
+	var isCollision = false
+
 	//get parameters from console (SK-9885)
 	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
 	ball := ollie.NewDriver(bleAdaptor)
@@ -29,6 +31,7 @@ func main() {
 	ball.SetStabilization(true)
 	ball.SetRotationRate(1)
 	ball.On("collision", func(data interface{}) {
+		isCollision = true
 
 		/* Colore RGB - rosso */
 		ball.SetRGB(255, 0, 0)
@@ -38,13 +41,12 @@ func main() {
 
 		/* Cm percorsi */
 		mRide := elapsed.Seconds() * direction.Ms
-		fmt.Printf("Tempo di collisione %f \n", mRide)
+		fmt.Printf("Tempo di collisione %f \n", (mRide / 10)
 
-		for i := 0; i < direction.Interval; i++ {
+		for i := 0; i < int(mRide / 10); i++ {
 			//setPosition(direction)
 		}
 		//maps.SetObstacle()
-
 	})
 
 	//setting ball to direction library
@@ -58,7 +60,14 @@ func main() {
 		for {
 			prolog.SetDirOfMap()
 			direction.Start = time.Now()
-			prolog.MakeMove()
+
+			speed, direct = prolog.MakeMove()
+			if !isCollision {
+				for i := 0; i < speed; i++ {
+					direction.SetPosition(direct)
+				}
+			}
+
 			prolog.Reset()
 		}
 	}
