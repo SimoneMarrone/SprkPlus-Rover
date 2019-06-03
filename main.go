@@ -41,7 +41,7 @@ func main() {
 
 		/* Cm percorsi */
 		mRide := elapsed.Seconds() * direction.Ms
-		fmt.Printf("Tempo di collisione %f \n", (mRide / 10))
+		fmt.Printf("Tempo di collisione %d \n", int(mRide / 10))
 /* 
 		for i := 0; i < int(mRide / 10); i++ {
 			//setPosition(direction)
@@ -58,15 +58,17 @@ func main() {
 
 	work := func() {
 		for {
-			prolog.SetDirOfMap()
 			direction.Start = time.Now()
+			prolog.SetDirOfMap()
 
 			speed, direct := prolog.MakeMove()
 			if !isCollision {
+				fmt.Println("is collision: ", isCollision)
 				for i := 0; i < speed; i++ {
 					direction.SetPosition(direct)
 				}
 			}
+			isCollision = false
 
 			prolog.Reset()
 		}
