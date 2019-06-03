@@ -17,6 +17,15 @@ import (
 	"./reference/Maps"
 )
 
+type CollisionConfig struct {
+    Method uint8
+    Xt  uint8
+    Yt  uint8
+    Xs  uint8
+    Ys  uint8
+    Dead uint8
+}
+
 func main() {
 
 	var isCollision = false
@@ -32,6 +41,18 @@ func main() {
 	ball.SetBackLEDOutput(1)
 	ball.SetStabilization(true)
 	ball.SetRotationRate(1)
+
+	collisionConfig := CollisionConfig {
+		Method: 0x01,
+		Xt: 0x20,
+		Yt: 0x20,
+		Xs: 0x20,
+		Ys: 0x20,
+		Dead: 0x60
+	}
+
+	ball.ConfigureCollisionDetection(collisionConfig)
+
 	ball.On("collision", func(data interface{}) {
 		isCollision = true
 
