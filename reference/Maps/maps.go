@@ -167,49 +167,49 @@ func LookAround() CoordObstacle {
 		if tempCurrentPositionX-(1+i) > 0 {
 			north = append(north, Maps[tempCurrentPositionX-(1+i)][tempCurrentPositionY])
 		} else {
-			north = append(north, "#")
+			north = append(north, square)
 		}
 
 		if tempCurrentPositionX+(1+i) < dimensionMap-1 {
 			south = append(south, Maps[tempCurrentPositionX+(1+i)][tempCurrentPositionY])
 		} else {
-			south = append(south, "#")
+			south = append(south, square)
 		}
 
 		if tempCurrentPositionY+(1+i) < dimensionMap-1 {
 			east = append(east, Maps[tempCurrentPositionX][tempCurrentPositionY+(1+i)])
 		} else {
-			east = append(east, "#")
+			east = append(east, square)
 		}
 
 		if tempCurrentPositionY-(1+i) > 0 {
 			west = append(west, Maps[tempCurrentPositionX][tempCurrentPositionY-(1+i)])
 		} else {
-			west = append(west, "#")
+			west = append(west, square)
 		}
 
 		if tempCurrentPositionX-(1+i) > 0 && tempCurrentPositionY-(1+i) > 0 {
 			northWest = append(northWest, Maps[tempCurrentPositionX-(1+i)][tempCurrentPositionY-(1+i)])
 		} else {
-			northWest = append(northWest, "#")
+			northWest = append(northWest, square)
 		}
 
 		if tempCurrentPositionX+(1+i) < dimensionMap-1 && tempCurrentPositionY-(1+i) > 0 {
 			southWest = append(southWest, Maps[tempCurrentPositionX+(1+i)][tempCurrentPositionY-(1+i)])
 		} else {
-			southWest = append(southWest, "#")
+			southWest = append(southWest, square)
 		}
 
 		if tempCurrentPositionX-(1+i) > 0 && tempCurrentPositionY+(1+i) < dimensionMap-1 {
 			northEast = append(northEast, Maps[tempCurrentPositionX-(1+i)][tempCurrentPositionY+(1+i)])
 		} else {
-			northEast = append(northEast, "#")
+			northEast = append(northEast, square)
 		}
 
 		if tempCurrentPositionX+(1+i) < dimensionMap-1 && tempCurrentPositionY+(1+i) < dimensionMap-1 {
 			southEast = append(southEast, Maps[tempCurrentPositionX+(1+i)][tempCurrentPositionY+(1+i)])
 		} else {
-			southEast = append(southEast, "#")
+			southEast = append(southEast, square)
 		}
 	}
 
