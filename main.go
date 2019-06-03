@@ -40,13 +40,13 @@ func main() {
 		elapsed := time.Since(direction.Start)
 
 		/* Cm percorsi */
-		mRide := elapsed.Seconds() * direction.Ms
-		fmt.Printf("Tempo di collisione %d \n", int(mRide / 10))
-/* 
-		for i := 0; i < int(mRide / 10); i++ {
-			//setPosition(direction)
-		} */
-		//maps.SetObstacle()
+		mRide := int((elapsed.Seconds() * direction.Ms) / 10)
+		fmt.Printf("Tempo di collisione %d \n", mRide)
+
+		for i := 0; i < mRide; i++ {
+			setPosition(direction)
+		}
+		maps.SetObstacle()
 	})
 
 	//setting ball to direction library
