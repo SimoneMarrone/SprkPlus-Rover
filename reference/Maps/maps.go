@@ -163,14 +163,54 @@ func LookAround() CoordObstacle {
 	var north, south, east, west, northWest, southWest, northEast, southEast []string
 
 	for i := 0; i < maxMemory; i++ {
-		north = append(north, Maps[tempCurrentPositionX-(1+i)][tempCurrentPositionY])
-		south = append(south, Maps[tempCurrentPositionX+(1+i)][tempCurrentPositionY])
-		east = append(east, Maps[tempCurrentPositionX][tempCurrentPositionY+(1+i)])
-		west = append(west, Maps[tempCurrentPositionX][tempCurrentPositionY-(1+i)])
-		northWest = append(northWest, Maps[tempCurrentPositionX-(1+i)][tempCurrentPositionY-(1+i)])
-		southWest = append(southWest, Maps[tempCurrentPositionX+(1+i)][tempCurrentPositionY-(1+i)])
-		northEast = append(northEast, Maps[tempCurrentPositionX-(1+i)][tempCurrentPositionY+(1+i)])
-		southEast = append(southEast, Maps[tempCurrentPositionX+(1+i)][tempCurrentPositionY+(1+i)])
+
+		if tempCurrentPositionX-(1+i) > 0 {
+			north = append(north, Maps[tempCurrentPositionX-(1+i)][tempCurrentPositionY])
+		} else {
+			north = append(north, "#")
+		}
+
+		if tempCurrentPositionX+(1+i) < dimensionMap-1 {
+			south = append(south, Maps[tempCurrentPositionX+(1+i)][tempCurrentPositionY])
+		} else {
+			south = append(south, "#")
+		}
+
+		if tempCurrentPositionY+(1+i) < dimensionMap-1 {
+			east = append(east, Maps[tempCurrentPositionX][tempCurrentPositionY+(1+i)])
+		} else {
+			east = append(east, "#")
+		}
+
+		if tempCurrentPositionY-(1+i) > 0 {
+			west = append(west, Maps[tempCurrentPositionX][tempCurrentPositionY-(1+i)])
+		} else {
+			west = append(west, "#")
+		}
+
+		if tempCurrentPositionX-(1+i) > 0 && tempCurrentPositionY-(1+i) > 0 {
+			northWest = append(northWest, Maps[tempCurrentPositionX-(1+i)][tempCurrentPositionY-(1+i)])
+		} else {
+			northWest = append(northWest, "#")
+		}
+
+		if tempCurrentPositionX+(1+i) < dimensionMap-1 && tempCurrentPositionY-(1+i) > 0 {
+			southWest = append(southWest, Maps[tempCurrentPositionX+(1+i)][tempCurrentPositionY-(1+i)])
+		} else {
+			southWest = append(southWest, "#")
+		}
+
+		if tempCurrentPositionX-(1+i) > 0 && tempCurrentPositionY+(1+i) < dimensionMap-1 {
+			northEast = append(northEast, Maps[tempCurrentPositionX-(1+i)][tempCurrentPositionY+(1+i)])
+		} else {
+			northEast = append(northEast, "#")
+		}
+
+		if tempCurrentPositionX+(1+i) < dimensionMap-1 && tempCurrentPositionY+(1+i) < dimensionMap-1 {
+			southEast = append(southEast, Maps[tempCurrentPositionX+(1+i)][tempCurrentPositionY+(1+i)])
+		} else {
+			southEast = append(southEast, "#")
+		}
 	}
 
 	coord := CoordObstacle{

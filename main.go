@@ -1,11 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
-	"time"
-	"bufio"
 	"strings"
+	"time"
 
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/ble"
@@ -44,9 +44,9 @@ func main() {
 			//setPosition(direction)
 		}
 		//maps.SetObstacle()
-		
+
 	})
-	
+
 	//setting ball to direction library
 	direction.SetBall(ball)
 
@@ -57,50 +57,50 @@ func main() {
 	work := func() {
 		for {
 			prolog.SetDirOfMap()
-			direction.Start = time.Now()	
+			direction.Start = time.Now()
 			prolog.MakeMove()
 			prolog.Reset()
 		}
 	}
 
-	if(len(os.Args) > 2){
+	if len(os.Args) > 2 {
 		switch os.Args[2] {
 		case "no-blt":
-			for{
+			for {
 				work()
 			}
 		case "interactive":
 			direction.Wait = 500
-			work := func(){
-				for{
+			work := func() {
+				for {
 					buf := bufio.NewReader(os.Stdin)
 					fmt.Print("> ")
 					sentence, _ := buf.ReadString('\n')
 					sentence = strings.Replace(sentence, "\n", "", -1)
 					fmt.Println(sentence)
-					direction.MoveInDirection(string(sentence),30)
-				}	
-			} 
+					direction.MoveInDirection(string(sentence), 30)
+				}
+			}
 			//New adapter
 			robot := gobot.NewRobot("sprkplus",
-			[]gobot.Connection{bleAdaptor},
-			[]gobot.Device{ball},
-			work,)
-			
+				[]gobot.Connection{bleAdaptor},
+				[]gobot.Device{ball},
+				work)
+
 			robot.Start()
-			
+
 			break
 		}
-	}else{ //normal execution
-		
-	//New adapter
-	robot := gobot.NewRobot("sprkplus",
-	[]gobot.Connection{bleAdaptor},
-	[]gobot.Device{ball},
-	work,
-)
-	
-	robot.Start()
+	} else { //normal execution
+
+		//New adapter
+		robot := gobot.NewRobot("sprkplus",
+			[]gobot.Connection{bleAdaptor},
+			[]gobot.Device{ball},
+			work,
+		)
+
+		robot.Start()
 	}
-	
+
 }
