@@ -116,45 +116,133 @@ func SetDirOfMap() {
 		SouthEast: make(map[string]bool)}
 
 	for index, _ := range DIR.North {
-		var movement_string = "can" + strconv.Itoa(index+1)
+		var movement_string = "can" + strconv.Itoa(1)
 		if index+1 == 1 || index+1 == 3 || index+1 == 6 {
 			if DIR.North[index] == "#" {
 				_directions.North[movement_string] = false
+				AssertBusy("n",strconv.Itoa(1))
+				AssertBusy("n",strconv.Itoa(3))
+				AssertBusy("n",strconv.Itoa(6))
+
+				AssertBusy("nw",strconv.Itoa(1))
+				AssertBusy("nw",strconv.Itoa(3))
+				AssertBusy("nw",strconv.Itoa(6))
+
+				AssertBusy("ne",strconv.Itoa(1))
+				AssertBusy("nw",strconv.Itoa(3))
+				AssertBusy("nw",strconv.Itoa(6))
 			} else {
 				_directions.North[movement_string] = true
 			}
 			if DIR.South[index] == "#" {
 				_directions.South[movement_string] = false
+				AssertBusy("s",strconv.Itoa(1))
+				AssertBusy("s",strconv.Itoa(3))
+				AssertBusy("s",strconv.Itoa(6))
+
+				AssertBusy("sw",strconv.Itoa(1))
+				AssertBusy("sw",strconv.Itoa(3))
+				AssertBusy("sw",strconv.Itoa(6))
+				
+				AssertBusy("se",strconv.Itoa(1))
+				AssertBusy("se",strconv.Itoa(3))
+				AssertBusy("se",strconv.Itoa(6))
 			} else {
 				_directions.South[movement_string] = true
 			}
 			if DIR.East[index] == "#" {
 				_directions.East[movement_string] = false
+				AssertBusy("e",strconv.Itoa(1))
+				AssertBusy("e",strconv.Itoa(3))
+				AssertBusy("e",strconv.Itoa(6))
+
+				AssertBusy("se",strconv.Itoa(1))
+				AssertBusy("se",strconv.Itoa(3))
+				AssertBusy("se",strconv.Itoa(6))
+				
+				AssertBusy("ne",strconv.Itoa(1))
+				AssertBusy("ne",strconv.Itoa(3))
+				AssertBusy("ne",strconv.Itoa(6))
 			} else {
 				_directions.East[movement_string] = true
 			}
 			if DIR.West[index] == "#" {
 				_directions.West[movement_string] = false
+				AssertBusy("w",strconv.Itoa(1))
+				AssertBusy("w",strconv.Itoa(3))
+				AssertBusy("w",strconv.Itoa(6))
+
+				AssertBusy("nw",strconv.Itoa(1))
+				AssertBusy("nw",strconv.Itoa(3))
+				AssertBusy("nw",strconv.Itoa(6))
+
+				AssertBusy("sw",strconv.Itoa(1))
+				AssertBusy("sw",strconv.Itoa(3))
+				AssertBusy("sw",strconv.Itoa(6))
 			} else {
 				_directions.West[movement_string] = true
 			}
 			if DIR.NorthWest[index] == "#" {
 				_directions.NorthWest[movement_string] = false
+				AssertBusy("nw",strconv.Itoa(1))
+				AssertBusy("nw",strconv.Itoa(3))
+				AssertBusy("nw",strconv.Itoa(6))
+
+				AssertBusy("n",strconv.Itoa(1))
+				AssertBusy("n",strconv.Itoa(3))
+				AssertBusy("n",strconv.Itoa(6))
+
+				AssertBusy("w",strconv.Itoa(1))
+				AssertBusy("w",strconv.Itoa(3))
+				AssertBusy("w",strconv.Itoa(6))
 			} else {
 				_directions.NorthWest[movement_string] = true
 			}
 			if DIR.SouthWest[index] == "#" {
 				_directions.SouthWest[movement_string] = false
+				AssertBusy("sw",strconv.Itoa(1))
+				AssertBusy("sw",strconv.Itoa(3))
+				AssertBusy("sw",strconv.Itoa(6))
+
+				AssertBusy("s",strconv.Itoa(1))
+				AssertBusy("s",strconv.Itoa(3))
+				AssertBusy("s",strconv.Itoa(6))
+
+				AssertBusy("w",strconv.Itoa(1))
+				AssertBusy("w",strconv.Itoa(3))
+				AssertBusy("w",strconv.Itoa(6))
 			} else {
 				_directions.SouthWest[movement_string] = true
 			}
 			if DIR.NorthEast[index] == "#" {
 				_directions.NorthEast[movement_string] = false
+				AssertBusy("ne",strconv.Itoa(1))
+				AssertBusy("ne",strconv.Itoa(3))
+				AssertBusy("ne",strconv.Itoa(6))
+
+				AssertBusy("n",strconv.Itoa(1))
+				AssertBusy("n",strconv.Itoa(3))
+				AssertBusy("n",strconv.Itoa(6))
+
+				AssertBusy("e",strconv.Itoa(1))
+				AssertBusy("e",strconv.Itoa(3))
+				AssertBusy("e",strconv.Itoa(6))
 			} else {
 				_directions.NorthEast[movement_string] = true
 			}
 			if DIR.SouthEast[index] == "#" {
 				_directions.SouthEast[movement_string] = false
+				AssertBusy("se",strconv.Itoa(1))
+				AssertBusy("se",strconv.Itoa(3))
+				AssertBusy("se",strconv.Itoa(6))
+
+				AssertBusy("s",strconv.Itoa(1))
+				AssertBusy("s",strconv.Itoa(3))
+				AssertBusy("s",strconv.Itoa(6))
+
+				AssertBusy("e",strconv.Itoa(1))
+				AssertBusy("e",strconv.Itoa(3))
+				AssertBusy("e",strconv.Itoa(6))
 			} else {
 				_directions.SouthEast[movement_string] = true
 			}

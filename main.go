@@ -20,10 +20,12 @@ import (
 func main() {
 
 	var isCollision = false
+	var current_direction string
 
 	//get parameters from console (SK-9885)
 	bleAdaptor := ble.NewClientAdaptor(os.Args[1])
 	ball := ollie.NewDriver(bleAdaptor)
+
 
 	// Default configuration
 	ball.EnableStopOnDisconnect()
@@ -44,9 +46,9 @@ func main() {
 		fmt.Printf("Tempo di collisione %d \n", mRide)
 
 		for i := 0; i < mRide; i++ {
-			setPosition(direction)
+			direction.SetPosition(current_direction)
 		}
-		maps.SetObstacle()
+		Maps.SetObstacle()
 	})
 
 	//setting ball to direction library
@@ -61,11 +63,12 @@ func main() {
 			direction.Start = time.Now()
 			prolog.SetDirOfMap()
 
-			speed, direct := prolog.MakeMove()
+			speed, current_direction := prolog.MakeMove()
+
 			if !isCollision {
 				fmt.Println("is collision: ", isCollision)
 				for i := 0; i < speed; i++ {
-					direction.SetPosition(direct)
+					direction.SetPosition(current_direction)
 				}
 			}
 			isCollision = false

@@ -11,7 +11,7 @@ import (
 )
 
 /* Dimensione mappa  */
-const dimensionMap = 20
+const dimensionMap = 40
 const square = "="
 const maxMemory = 6
 
