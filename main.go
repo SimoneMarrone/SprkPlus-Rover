@@ -10,21 +10,13 @@ import (
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/ble"
 	"gobot.io/x/gobot/platforms/sphero/ollie"
+	"gobot.io/x/gobot/platforms/sphero"
 
 	"./prolog"
 
 	"./reference/Direction"
 	"./reference/Maps"
 )
-
-type CollisionConfig struct {
-    Method uint8
-    Xt  uint8
-    Yt  uint8
-    Xs  uint8
-    Ys  uint8
-    Dead uint8
-}
 
 func main() {
 
@@ -42,16 +34,24 @@ func main() {
 	ball.SetStabilization(true)
 	ball.SetRotationRate(1)
 
-	collisionConfig := CollisionConfig {
+	/* collConf = sphero.CollisionConfig{
 		Method: 0x01,
 		Xt: 0x20,
 		Yt: 0x20,
 		Xs: 0x20,
 		Ys: 0x20,
-		Dead: 0x60
-	}
+		Dead: 0x60}
+ */
+	ball.ConfigureCollisionDetection(sphero.CollisionConfig{
+		Method: 0x00,
+		Xt: 0x40,
+		Yt: 0x40,
+		Xs: 0x40,
+		Ys: 0x40,
+		Dead: 0x60})
 
-	ball.ConfigureCollisionDetection(collisionConfig)
+
+	
 
 	ball.On("collision", func(data interface{}) {
 		isCollision = true
