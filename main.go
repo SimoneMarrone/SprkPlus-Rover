@@ -12,7 +12,7 @@ import (
 	"gobot.io/x/gobot/platforms/sphero/ollie"
 	"gobot.io/x/gobot/platforms/sphero"
 
-	"./prolog"
+	"./reference/Prolog"
 
 	"./reference/Direction"
 	"./reference/Maps"
@@ -50,8 +50,6 @@ func main() {
 		Ys: 0x40,
 		Dead: 0x60})
 
-
-	
 
 	ball.On("collision", func(data interface{}) {
 		isCollision = true
@@ -137,5 +135,4 @@ func main() {
 
 		robot.Start()
 	}
-
 }
